@@ -1,0 +1,6 @@
+{
+  "name": "AuraMed Pharmacy & Healthcare",
+  "description": "Premium online pharmacy and healthcare platform for genuine medicines, lab tests, and doctor consultations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

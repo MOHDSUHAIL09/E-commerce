@@ -1,0 +1,687 @@
+/* AuraMed Premium Pharmacy & Healthcare CSS Design System */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+:root {
+  --primary-green: #159B64;
+  --dark-green: #08784B;
+  --light-green: #EAF7F0;
+  --bg-color: #F7FAF8;
+  --white: #FFFFFF;
+  --primary-text: #172B24;
+  --secondary-text: #64756D;
+  --border-color: #E5ECE8;
+  --accent-orange: #E67E22;
+  --danger-red: #E74C3C;
+  --info-blue: #2980B9;
+  --shadow-sm: 0 2px 6px rgba(23, 43, 36, 0.05);
+  --shadow-md: 0 4px 14px rgba(23, 43, 36, 0.08);
+  --shadow-lg: 0 10px 25px rgba(23, 43, 36, 0.12);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --font-stack: Arial, Helvetica, sans-serif;
+}
+
+/* 2 Full Cards on Mobile Viewport - No Half Cut-offs */
+.responsive-slider-card {
+  width: 215px;
+  min-width: 215px;
+  max-width: 215px;
+  flex: 0 0 215px;
+}
+
+@media (max-width: 575.98px) {
+  .responsive-slider-card {
+    width: calc(50% - 4px) !important;
+    min-width: calc(50% - 4px) !important;
+    max-width: calc(50% - 4px) !important;
+    flex: 0 0 calc(50% - 4px) !important;
+    padding: 10px 8px !important;
+  }
+}
+
+.responsive-brand-card {
+  width: 185px;
+  min-width: 185px;
+  max-width: 185px;
+  flex: 0 0 185px;
+}
+
+@media (max-width: 575.98px) {
+  .responsive-brand-card {
+    width: calc(50% - 4px) !important;
+    min-width: calc(50% - 4px) !important;
+    max-width: calc(50% - 4px) !important;
+    flex: 0 0 calc(50% - 4px) !important;
+    padding: 12px 8px !important;
+    height: 225px !important;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-stack) !important;
+  background-color: var(--bg-color);
+  color: var(--primary-text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4, h5, h6,
+p, span, a, button, input, select, textarea, label {
+  font-family: var(--font-stack) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--primary-text);
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+a {
+  color: var(--primary-green);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--dark-green);
+}
+
+/* Custom Healthcare UI Utility Classes */
+.bg-primary-green {
+  background-color: var(--primary-green) !important;
+}
+
+.bg-dark-green {
+  background-color: var(--dark-green) !important;
+}
+
+.bg-light-green {
+  background-color: var(--light-green) !important;
+}
+
+.bg-surface {
+  background-color: var(--white) !important;
+}
+
+.bg-app {
+  background-color: var(--bg-color) !important;
+}
+
+.text-primary-green {
+  color: var(--primary-green) !important;
+}
+
+.text-dark-green {
+  color: var(--dark-green) !important;
+}
+
+.text-primary-dark {
+  color: var(--primary-text) !important;
+}
+
+.text-secondary-muted {
+  color: var(--secondary-text) !important;
+}
+
+.border-theme {
+  border-color: var(--border-color) !important;
+}
+
+/* Buttons */
+.btn-auramed {
+  background-color: var(--primary-green);
+  color: var(--white);
+  border: 1px solid var(--primary-green);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 8px 18px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.btn-auramed:hover, .btn-auramed:focus {
+  background-color: var(--dark-green);
+  border-color: var(--dark-green);
+  color: var(--white);
+  box-shadow: 0 4px 12px rgba(21, 155, 100, 0.25);
+}
+
+.btn-auramed-outline {
+  background-color: transparent;
+  color: var(--primary-green);
+  border: 1px solid var(--primary-green);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 8px 18px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.btn-auramed-outline:hover, .btn-auramed-outline:focus {
+  background-color: var(--light-green);
+  color: var(--dark-green);
+  border-color: var(--dark-green);
+}
+
+.btn-auramed-light {
+  background-color: var(--light-green);
+  color: var(--dark-green);
+  border: 1px solid rgba(21, 155, 100, 0.2);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.btn-auramed-light:hover {
+  background-color: #d7f0e3;
+  color: var(--dark-green);
+}
+
+/* Cards */
+.card-auramed {
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-auramed:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-auramed-hoverable:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: #c7ded2;
+}
+
+/* Badges */
+.badge-rx {
+  background-color: #FFF3CD;
+  color: #856404;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid #FFEBAA;
+}
+
+.badge-otc {
+  background-color: #E2F0D9;
+  color: #2E7D32;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-discount {
+  background-color: #E74C3C;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.badge-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.badge-status-pending {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+
+.badge-status-approved, .badge-status-delivered, .badge-status-completed {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+.badge-status-processing, .badge-status-transit {
+  background-color: #DBEAFE;
+  color: #1E40AF;
+}
+
+.badge-status-rejected, .badge-status-cancelled {
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+
+/* Forms */
+.form-control-auramed {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 9px 14px;
+  font-size: 14px;
+  color: var(--primary-text);
+  background-color: var(--white);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control-auramed:focus {
+  border-color: var(--primary-green);
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(21, 155, 100, 0.15);
+}
+
+/* Top Announcement bar */
+.top-bar {
+  background-color: #0E5E3B;
+  color: #EAF7F0;
+  font-size: 12px;
+  padding: 6px 0;
+}
+
+/* Header & Search */
+.header-main {
+  background: var(--white);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.search-input-group {
+  position: relative;
+  width: 100%;
+}
+
+.search-autocomplete-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 1050;
+  max-height: 380px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+
+/* Mega Menu */
+.mega-menu-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: var(--white);
+  border-top: 2px solid var(--primary-green);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  padding: 24px;
+}
+
+/* Sidebar Drawer */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(23, 43, 36, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 1060;
+}
+
+.sidebar-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 85vw;
+  background-color: var(--white);
+  z-index: 1070;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+}
+
+/* Product Card */
+.product-card {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: all 0.25s ease;
+}
+
+.product-card:hover {
+  border-color: #bdd5c8;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.product-image-container {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 12px;
+  background-color: #FAFCFA;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.product-image-container img {
+  max-height: 140px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image-container img {
+  transform: scale(1.05);
+}
+
+.product-rating {
+  font-size: 12px;
+  background: #EAF7F0;
+  color: var(--dark-green);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Category Pill Card */
+.category-card {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 12px;
+  text-align: center;
+  transition: all 0.25s ease;
+  display: block;
+  color: var(--primary-text);
+  height: 100%;
+}
+
+.category-card:hover {
+  border-color: var(--primary-green);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  color: var(--primary-green);
+}
+
+.category-icon-box {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  background: var(--light-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-green);
+  font-size: 24px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.category-card:hover .category-icon-box {
+  background: var(--primary-green);
+  color: var(--white);
+  transform: scale(1.08);
+}
+
+/* Quantity selector */
+.qty-selector {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--white);
+}
+
+.qty-btn {
+  background: #F4F7F5;
+  border: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--primary-text);
+  font-weight: bold;
+  transition: background 0.15s;
+}
+
+.qty-btn:hover {
+  background: #E5ECE8;
+}
+
+.qty-value {
+  width: 36px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Dashboard sidebar */
+.dashboard-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  color: var(--secondary-text);
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.dashboard-nav-item:hover {
+  background: var(--light-green);
+  color: var(--dark-green);
+}
+
+.dashboard-nav-item.active {
+  background: var(--primary-green);
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* Prescription upload dropzone */
+.dropzone-box {
+  border: 2px dashed var(--primary-green);
+  background-color: var(--light-green);
+  border-radius: var(--radius-md);
+  padding: 36px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropzone-box:hover, .dropzone-box.active {
+  background-color: #d7f0e3;
+  border-color: var(--dark-green);
+}
+
+/* Footer */
+.footer-auramed {
+  background-color: #0E3626;
+  color: #D1DFD8;
+  padding: 48px 0 24px;
+}
+
+.footer-auramed a {
+  color: #A9C2B6;
+  font-size: 14px;
+}
+
+.footer-auramed a:hover {
+  color: #FFFFFF;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  margin-top: 40px;
+  font-size: 13px;
+  color: #8CA699;
+}
+
+/* Role Switcher Floating Pill */
+.role-badge-bar {
+  background: #172B24;
+  color: #FFFFFF;
+  padding: 4px 12px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 20px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B3C8BE;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #159B64;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Healthcare Category Card matching Image 2 */
+.healthcare-cat-card {
+  background: #FFFFFF;
+  border: 1px solid #E5ECE8;
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+  text-decoration: none;
+  height: 100%;
+}
+
+.healthcare-cat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(16, 185, 129, 0.16);
+  border-color: #10B981;
+}
+
+.healthcare-cat-card:hover .healthcare-cat-arrow {
+  background-color: #047857 !important;
+  color: #FFFFFF !important;
+  transform: translateX(3px);
+}
+
+/* Specialty Cards Hover (Matches Apollo 24|7 image_10cb1170) */
+.specialty-card-hover {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.specialty-card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 95, 64, 0.12);
+  border-color: #159B64;
+}
+
+/* Category Slider: Exactly 5 cards on desktop (no cut-off / full card display) */
+.category-slider-card {
+  width: calc((100% - 10px) / 2);
+  min-width: calc((100% - 10px) / 2);
+}
+
+@media (min-width: 576px) {
+  .category-slider-card {
+    width: calc((100% - 2 * 12px) / 3);
+    min-width: calc((100% - 2 * 12px) / 3);
+  }
+}
+
+@media (min-width: 992px) {
+  .category-slider-card {
+    width: calc((100% - 4 * 16px) / 5) !important;
+    min-width: calc((100% - 4 * 16px) / 5) !important;
+    max-width: calc((100% - 4 * 16px) / 5) !important;
+  }
+}
+
+
