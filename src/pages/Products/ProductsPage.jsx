@@ -100,7 +100,7 @@ export default function ProductsPage() {
       if (sortBy === 'price-low') return a.price - b.price;
       if (sortBy === 'price-high') return b.price - a.price;
       if (sortBy === 'rating') return b.rating - a.rating;
-      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      if (sortBy === 'name');
       // Popularity default
       return b.reviewsCount - a.reviewsCount;
     });

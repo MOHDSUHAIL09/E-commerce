@@ -14,7 +14,7 @@ import { useHealthcare } from '../../context/HealthcareContext';
 export default function ProductDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { productsList, toggleCompare, compareItems } = useHealthcare();
+  const { productsList } = useHealthcare();
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
 
@@ -61,7 +61,6 @@ export default function ProductDetailsPage() {
   }
 
   const isFav = isInWishlist(product.id);
-  const isCompared = compareItems.includes(product.id);
   const relatedProducts = productsList.filter(p => p.categorySlug === product.categorySlug && p.id !== product.id).slice(0, 4);
 
   const handleBuyNow = () => {
@@ -153,13 +152,6 @@ export default function ProductDetailsPage() {
                   {product.category}
                 </span>
                 <div className="d-flex align-items-center gap-2">
-                  <button
-                    onClick={() => toggleCompare(product.id)}
-                    className={`btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 ${isCompared ? 'active bg-success text-white' : ''}`}
-                    style={{ fontSize: '12px' }}
-                  >
-                    <FaExchangeAlt size={12} /> {isCompared ? 'Compared' : 'Compare'}
-                  </button>
                   <button
                     onClick={() => toggleWishlist(product.id)}
                     className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
@@ -426,47 +418,6 @@ export default function ProductDetailsPage() {
                 </div>
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Frequently Bought Together Combo Deal */}
-        <div className="card-auramed p-4 mb-5" style={{ backgroundColor: '#F0F9F4', borderColor: '#B7E4C7' }}>
-          <h5 className="fw-bold text-dark mb-3">Frequently Bought Together</h5>
-          <div className="row g-3 align-items-center">
-            <div className="col-md-7">
-              <div className="d-flex align-items-center gap-3">
-                <div className="p-2 bg-white rounded border text-center" style={{ width: '80px' }}>
-                  <img src={product.image} alt={product.name} style={{ width: '60px', height: '60px', objectFit: 'contain' }} />
-                </div>
-                <span className="fs-4 text-muted fw-bold">+</span>
-                <div className="p-2 bg-white rounded border text-center" style={{ width: '80px' }}>
-                  <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=200&auto=format&fit=crop&q=80" alt="Vitamin C" style={{ width: '60px', height: '60px', objectFit: 'contain' }} />
-                </div>
-                <div>
-                  <div className="fw-semibold text-dark" style={{ fontSize: '13px' }}>
-                    {product.name} + AuraC-Zinc 1000mg Combo
-                  </div>
-                  <div className="text-secondary" style={{ fontSize: '12px' }}>
-                    Save an additional 10% when purchased together
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-5 text-md-end">
-              <span className="fs-5 fw-bold text-dark-green me-3">
-                ${(product.price + 13.50 * 0.9).toFixed(2)}
-              </span>
-              <button
-                onClick={() => {
-                  addToCart(product, 1);
-                  addToCart(productsList[0], 1);
-                }}
-                className="btn btn-sm btn-auramed"
-              >
-                Add Both to Cart
-              </button>
-            </div>
           </div>
         </div>
 

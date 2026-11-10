@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   FaCrown, FaUserShield, FaUsers, FaChartLine, 
   FaCog, FaHistory, FaCheckCircle, FaTimesCircle, 
   FaShieldAlt, FaFileInvoiceDollar, FaDatabase, FaServer,
-  FaKey, FaSearch, FaUserPlus, FaArrowUp, FaLock
+  FaKey, FaSearch, FaUserPlus, FaArrowUp, FaLock,
+  FaBars, FaHome, FaTachometerAlt, FaSignOutAlt,
+  FaBell, FaRegBuilding, FaExclamationTriangle, FaArrowDown
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import { useHealthcare } from '../../context/HealthcareContext';
@@ -12,9 +14,13 @@ import { useHealthcare } from '../../context/HealthcareContext';
 export default function SuperAdminDashboard() {
   const { currentRole, switchRole } = useAuth();
   const { orders, productsList, doctorAppointments } = useHealthcare();
+  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('executive'); // 'executive', 'staff', 'system_config', 'audit_logs'
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Sidebar State for Mobile
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   // Super Admin Staff Directory State
   const [staffList, setStaffList] = useState([
@@ -46,6 +52,16 @@ export default function SuperAdminDashboard() {
     { id: 'log-105', action: 'Database Backup Completed to Encrypted Cold Vault', actor: 'Automated Daemon', timestamp: 'Nov 01, 12:00 AM', ip: 'internal-cron', status: 'Success' }
   ];
 
+  // Lock body scroll when mobile sidebar is open
+  useEffect(() => {
+    if (isMobileSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isMobileSidebarOpen]);
+
   const handleToggleStatus = (id) => {
     setStaffList(prev => prev.map(s => s.id === id ? { ...s, status: s.status === 'Active' ? 'Suspended' : 'Active' } : s));
   };
@@ -60,426 +76,550 @@ export default function SuperAdminDashboard() {
     setTimeout(() => setSavedNotice(false), 3000);
   };
 
+  const sidebarLinks = [
+    { id: 'home', label: 'Back to Store', icon: <FaHome />, action: () => switchRole('customer') },
+    { id: 'executive', label: 'Executive Overview', icon: <FaTachometerAlt /> },
+    { id: 'staff', label: 'Access Control', icon: <FaUsers />, count: staffList.length },
+    { id: 'system_config', label: 'Governance & Tax', icon: <FaCog /> },
+    { id: 'audit_logs', label: 'Audit Logs', icon: <FaHistory /> },
+  ];
+
   return (
-    <div className="py-4 bg-light min-vh-100">
-      <div className="container-xl">
-        
-        {/* Super Admin Executive Top Header */}
-        <div className="d-flex flex-wrap align-items-center justify-content-between gap-3 p-4 rounded-4 mb-4 text-white shadow-sm"
-          style={{ background: 'linear-gradient(135deg, #2C1A4D 0%, #4B2E83 50%, #159B64 100%)' }}
-        >
-          <div className="d-flex align-items-center gap-3">
-            <div 
-              className="rounded-circle d-flex align-items-center justify-content-center text-white"
-              style={{ width: '56px', height: '56px', backgroundColor: 'rgba(255,255,255,0.15)', border: '2px solid rgba(255,255,255,0.3)' }}
-            >
-              <FaCrown size={28} color="#F1C40F" />
+    <div className="admin-layout-wrapper" style={{ backgroundColor: '#F8FAF9' }}>
+      
+      {/* SIDEBAR */}
+      <aside 
+        className={`admin-sidebar bg-white border-end shadow-sm d-flex flex-column ${
+          isMobileSidebarOpen ? 'mobile-open' : ''
+        }`}
+        style={{ width: '260px' }}
+      >
+        <div className="border-bottom d-flex align-items-center px-4" style={{ height: '70px', flexShrink: 0 }}>
+          <div className="d-flex align-items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+            <div className="bg-success text-white rounded d-flex align-items-center justify-content-center" style={{ width: '32px', height: '32px' }}>
+               <FaCrown size={16} />
             </div>
-            <div>
-              <div className="d-flex align-items-center gap-2">
-                <h4 className="fw-bold mb-0">Super Admin Executive Portal</h4>
-                <span className="badge bg-warning text-dark fw-bold px-2 py-1" style={{ fontSize: '11px' }}>ROOT ACCESS</span>
-              </div>
-              <p className="mb-0 text-white-50" style={{ fontSize: '13px' }}>
-                Full system oversight, staff privilege governance, master revenue analytics & platform configuration.
-              </p>
-            </div>
+            <span className="fw-bolder text-dark" style={{ fontSize: '18px', letterSpacing: '-0.5px' }}>Super Admin</span>
           </div>
+        </div>
 
-          <div className="d-flex align-items-center gap-2 flex-wrap">
-            <Link to="/admin-dashboard" className="btn btn-sm btn-light fw-bold px-3 py-2 text-dark">
-              <FaUserShield className="me-1 text-primary" /> Store Admin View
-            </Link>
-            <button 
-              onClick={() => switchRole('customer')} 
-              className="btn btn-sm btn-outline-light px-3 py-2"
+        <div className="flex-grow-1 overflow-auto py-3 px-2">
+          {sidebarLinks.map((link) => (
+            <button key={link.id} onClick={() => { if (link.action) { link.action(); } else { setActiveTab(link.id); } setIsMobileSidebarOpen(false); }}
+              className={`btn w-100 text-start d-flex align-items-center mb-1 rounded-3 justify-content-between px-3 py-2 ${
+                activeTab === link.id ? 'bg-success-subtle text-success fw-bold' : 'text-secondary fw-semibold bg-transparent hover-bg-light'
+              }`}
+              style={{ border: 'none', transition: 'all 0.2s' }}
             >
-              Back to Store
+              <div className="d-flex align-items-center gap-3">
+                <span style={{ fontSize: '18px' }} className="flex-shrink-0">{link.icon}</span>
+                <span className="text-nowrap" style={{ fontSize: '13.5px' }}>{link.label}</span>
+              </div>
+              {link.count !== undefined && (
+                <span className={`badge rounded-pill ${activeTab === link.id ? 'bg-success text-white' : 'bg-light text-dark border'}`} style={{ fontSize: '10px' }}>{link.count}</span>
+              )}
             </button>
-          </div>
+          ))}
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="d-flex gap-2 mb-4 overflow-auto pb-1">
-          <button
-            onClick={() => setActiveTab('executive')}
-            className={`btn btn-sm px-4 py-2 fw-bold rounded-pill d-flex align-items-center gap-2 ${
-              activeTab === 'executive' ? 'btn-dark text-white shadow-sm' : 'btn-white bg-white text-secondary border'
-            }`}
-          >
-            <FaChartLine /> Executive Overview
-          </button>
-          <button
-            onClick={() => setActiveTab('staff')}
-            className={`btn btn-sm px-4 py-2 fw-bold rounded-pill d-flex align-items-center gap-2 ${
-              activeTab === 'staff' ? 'btn-dark text-white shadow-sm' : 'btn-white bg-white text-secondary border'
-            }`}
-          >
-            <FaUsers /> Staff & Access Control ({staffList.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('system_config')}
-            className={`btn btn-sm px-4 py-2 fw-bold rounded-pill d-flex align-items-center gap-2 ${
-              activeTab === 'system_config' ? 'btn-dark text-white shadow-sm' : 'btn-white bg-white text-secondary border'
-            }`}
-          >
-            <FaCog /> Platform Governance & Tax
-          </button>
-          <button
-            onClick={() => setActiveTab('audit_logs')}
-            className={`btn btn-sm px-4 py-2 fw-bold rounded-pill d-flex align-items-center gap-2 ${
-              activeTab === 'audit_logs' ? 'btn-dark text-white shadow-sm' : 'btn-white bg-white text-secondary border'
-            }`}
-          >
-            <FaHistory /> Security Audit Logs
-          </button>
-        </div>
-
-        {/* 1. EXECUTIVE OVERVIEW */}
-        {activeTab === 'executive' && (
-          <div>
-            {/* Top KPI Cards */}
-            <div className="row g-3 mb-4">
-              <div className="col-12 col-sm-6 col-lg-3">
-                <div className="card-auramed p-3 bg-white h-100">
-                  <div className="d-flex align-items-center justify-content-between mb-2">
-                    <span className="text-secondary" style={{ fontSize: '12px' }}>Gross Platform GMV</span>
-                    <div className="p-2 rounded-circle bg-success-subtle text-success">
-                      <FaFileInvoiceDollar size={16} />
-                    </div>
-                  </div>
-                  <div className="fs-3 fw-bold text-dark">₹1,48,920.00</div>
-                  <small className="text-success fw-semibold d-flex align-items-center gap-1">
-                    <FaArrowUp size={10} /> 22.4% vs last cycle
-                  </small>
-                </div>
-              </div>
-
-              <div className="col-12 col-sm-6 col-lg-3">
-                <div className="card-auramed p-3 bg-white h-100">
-                  <div className="d-flex align-items-center justify-content-between mb-2">
-                    <span className="text-secondary" style={{ fontSize: '12px' }}>Active Super/Admin Staff</span>
-                    <div className="p-2 rounded-circle bg-primary-subtle text-primary">
-                      <FaUserShield size={16} />
-                    </div>
-                  </div>
-                  <div className="fs-3 fw-bold text-dark">{staffList.length + 2}</div>
-                  <small className="text-muted">Zero unauthorized attempts</small>
-                </div>
-              </div>
-
-              <div className="col-12 col-sm-6 col-lg-3">
-                <div className="card-auramed p-3 bg-white h-100">
-                  <div className="d-flex align-items-center justify-content-between mb-2">
-                    <span className="text-secondary" style={{ fontSize: '12px' }}>Total Formulary SKUs</span>
-                    <div className="p-2 rounded-circle bg-warning-subtle text-warning">
-                      <FaDatabase size={16} />
-                    </div>
-                  </div>
-                  <div className="fs-3 fw-bold text-dark">{productsList.length} Items</div>
-                  <small className="text-success fw-semibold">100% Licensed batch supply</small>
-                </div>
-              </div>
-
-              <div className="col-12 col-sm-6 col-lg-3">
-                <div className="card-auramed p-3 bg-white h-100">
-                  <div className="d-flex align-items-center justify-content-between mb-2">
-                    <span className="text-secondary" style={{ fontSize: '12px' }}>System Health Uptime</span>
-                    <div className="p-2 rounded-circle bg-info-subtle text-info">
-                      <FaServer size={16} />
-                    </div>
-                  </div>
-                  <div className="fs-3 fw-bold text-dark">99.98%</div>
-                  <small className="text-success fw-semibold">Cloud nodes healthy</small>
-                </div>
-              </div>
-            </div>
-
-            {/* Platform Master Breakdown */}
-            <div className="row g-4">
-              <div className="col-lg-8">
-                <div className="card-auramed p-4 bg-white">
-                  <h6 className="fw-bold text-dark mb-3">Enterprise Financial & Fulfillment Performance</h6>
-                  <div className="p-3 bg-light rounded-3 mb-3 border">
-                    <div className="row text-center g-3">
-                      <div className="col-4 border-end">
-                        <small className="text-muted d-block" style={{ fontSize: '11px' }}>PRESCRIPTION ORDERS</small>
-                        <strong className="fs-5 text-dark">{orders.length + 42}</strong>
-                      </div>
-                      <div className="col-4 border-end">
-                        <small className="text-muted d-block" style={{ fontSize: '11px' }}>DOCTOR SESSIONS</small>
-                        <strong className="fs-5 text-dark">{doctorAppointments.length + 18}</strong>
-                      </div>
-                      <div className="col-4">
-                        <small className="text-muted d-block" style={{ fontSize: '11px' }}>AVG PLATFORM BASKET</small>
-                        <strong className="fs-5 text-dark-green">₹640</strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="d-flex align-items-center justify-content-between pt-2">
-                    <div className="text-secondary" style={{ fontSize: '13px' }}>
-                      <FaShieldAlt className="text-success me-1" />
-                      Encrypted multi-tenant compliance ledger active with automated fraud screening.
-                    </div>
-                    <span className="badge bg-success-subtle text-success">Compliant</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-lg-4">
-                <div className="card-auramed p-4 bg-white">
-                  <h6 className="fw-bold text-dark mb-3">Quick Platform Actions</h6>
-                  <div className="d-flex flex-column gap-2">
-                    <button 
-                      onClick={() => setActiveTab('staff')}
-                      className="btn btn-outline-dark text-start d-flex align-items-center justify-content-between p-2 rounded-3"
-                    >
-                      <span><FaUserPlus className="me-2 text-primary" /> Manage Staff Permissions</span>
-                      <span>→</span>
-                    </button>
-                    <button 
-                      onClick={() => setActiveTab('system_config')}
-                      className="btn btn-outline-dark text-start d-flex align-items-center justify-content-between p-2 rounded-3"
-                    >
-                      <span><FaCog className="me-2 text-warning" /> Adjust Delivery & Tax Rates</span>
-                      <span>→</span>
-                    </button>
-                    <button 
-                      onClick={() => setActiveTab('audit_logs')}
-                      className="btn btn-outline-dark text-start d-flex align-items-center justify-content-between p-2 rounded-3"
-                    >
-                      <span><FaLock className="me-2 text-danger" /> Review Security Audit Logs</span>
-                      <span>→</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+        <div className="p-3 border-top" style={{ flexShrink: 0 }}>
+          <div className="d-flex align-items-center gap-2 mb-3 px-2">
+            <div className="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style={{ width: '36px', height: '36px', fontSize: '14px' }}>SA</div>
+            <div>
+              <div className="fw-bold text-dark" style={{ fontSize: '13px' }}>Super Admin</div>
+              <div className="text-muted" style={{ fontSize: '11px' }}>ROOT ACCESS</div>
             </div>
           </div>
-        )}
+          <button onClick={() => switchRole('customer')} className="btn btn-light w-100 border text-danger fw-semibold d-flex align-items-center justify-content-center gap-2 py-2">
+            <FaSignOutAlt /> Exit Portal
+          </button>
+        </div>
+      </aside>
 
-        {/* 2. STAFF & ACCESS CONTROL */}
-        {activeTab === 'staff' && (
-          <div className="card-auramed p-4 bg-white">
-            <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-              <div>
-                <h5 className="fw-bold text-dark mb-1">Administrative Role & Personnel Directory</h5>
-                <p className="text-secondary mb-0" style={{ fontSize: '13px' }}>
-                  Super Admin exclusive privilege: Grant, promote, or revoke staff authorization levels.
-                </p>
+      {/* MOBILE OVERLAY */}
+      {isMobileSidebarOpen && (
+        <div className="position-fixed top-0 start-0 w-100 h-100 d-lg-none" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1040 }} onClick={() => setIsMobileSidebarOpen(false)}></div>
+      )}
+
+      {/* MAIN CONTENT */}
+      <main className="admin-main-content" style={{ marginLeft: '260px' }}>
+        
+        {/* HEADER */}
+        <header className="admin-header bg-white border-bottom shadow-xs d-flex align-items-center justify-content-between px-3 px-md-4" style={{ height: '70px', flexShrink: 0 }}>
+          <div className="d-flex align-items-center gap-3">
+            <button className="btn btn-light border p-2 d-lg-none" onClick={() => setIsMobileSidebarOpen(true)}>
+              <FaBars size={16} />
+            </button>
+            <div className="d-none d-md-block">
+              <h6 className="fw-bold mb-0 text-dark">{sidebarLinks.find(l => l.id === activeTab)?.label || 'Dashboard'}</h6>
+              <small className="text-muted" style={{ fontSize: '11px' }}>Enterprise Control Panel</small>
+            </div>
+          </div>
+
+          <div className="d-flex align-items-center gap-2 gap-md-3">
+            <button className="btn btn-light border p-2 rounded-circle position-relative">
+              <FaBell size={16} className="text-secondary" />
+              <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+            </button>
+            <div className="d-flex align-items-center gap-2 border-start ps-2 ps-md-3">
+              <Link to="/admin-dashboard" className="btn btn-sm btn-outline-success fw-bold px-3 py-2 d-none d-sm-flex align-items-center gap-2">
+                <FaUserShield size={12} /> Store Admin View
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        {/* SCROLLABLE BODY */}
+        <div className="admin-body-scroll p-3 p-md-4">
+          
+          <ul className="nav nav-pills gap-2 mb-4 bg-white p-2 rounded border shadow-sm overflow-auto flex-nowrap hide-scrollbar">
+            {sidebarLinks.filter(l => l.id !== 'home').map(link => (
+              <li className="nav-item" key={link.id}>
+                <button className={`btn btn-sm text-nowrap ${activeTab === link.id ? 'btn-auramed' : 'btn-light text-dark'}`} onClick={() => setActiveTab(link.id)}>
+                  {link.label} {link.count !== undefined && `(${link.count})`}
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          {/* ========================================================
+              1. EXECUTIVE OVERVIEW
+          ======================================================== */}
+          {activeTab === 'executive' && (
+            <div className="animate-fade-in">
+              {/* Top KPI Cards */}
+              <div className="row g-3 mb-4">
+                <div className="col-12 col-sm-6 col-lg-3">
+                  <div className="card-auramed p-3 h-100 border-0 shadow-sm position-relative overflow-hidden">
+                    <div className="d-flex align-items-center justify-content-between mb-2">
+                      <span className="text-secondary fw-semibold" style={{ fontSize: '12px' }}>Gross Platform GMV</span>
+                      <div className="p-2 rounded-circle bg-light-green text-primary-green">
+                        <FaFileInvoiceDollar size={16} />
+                      </div>
+                    </div>
+                    <div className="fs-4 fw-bolder text-dark mb-2">₹1,48,920</div>
+                    <span className="badge bg-success-subtle text-success border border-success-subtle rounded-pill fw-bold px-2 py-1">
+                      <FaArrowUp size={10} className="me-1" /> 22.4% vs last cycle
+                    </span>
+                  </div>
+                </div>
+
+                <div className="col-12 col-sm-6 col-lg-3">
+                  <div className="card-auramed p-3 h-100 border-0 shadow-sm position-relative overflow-hidden">
+                    <div className="d-flex align-items-center justify-content-between mb-2">
+                      <span className="text-secondary fw-semibold" style={{ fontSize: '12px' }}>Active Admin Staff</span>
+                      <div className="p-2 rounded-circle bg-light-green text-primary-green">
+                        <FaUserShield size={16} />
+                      </div>
+                    </div>
+                    <div className="fs-4 fw-bolder text-dark mb-2">{staffList.length + 2}</div>
+                    <span className="text-muted fw-semibold" style={{ fontSize: '11px' }}>Zero unauthorized attempts</span>
+                  </div>
+                </div>
+
+                <div className="col-12 col-sm-6 col-lg-3">
+                  <div className="card-auramed p-3 h-100 border-0 shadow-sm position-relative overflow-hidden">
+                    <div className="d-flex align-items-center justify-content-between mb-2">
+                      <span className="text-secondary fw-semibold" style={{ fontSize: '12px' }}>Total Formulary SKUs</span>
+                      <div className="p-2 rounded-circle bg-light-green text-primary-green">
+                        <FaDatabase size={16} />
+                      </div>
+                    </div>
+                    <div className="fs-4 fw-bolder text-dark mb-2">{productsList.length} Items</div>
+                    <span className="text-success fw-bold" style={{ fontSize: '11px' }}>100% Licensed supply</span>
+                  </div>
+                </div>
+
+                <div className="col-12 col-sm-6 col-lg-3">
+                  <div className="card-auramed p-3 h-100 border-0 shadow-sm position-relative overflow-hidden">
+                    <div className="d-flex align-items-center justify-content-between mb-2">
+                      <span className="text-secondary fw-semibold" style={{ fontSize: '12px' }}>System Health Uptime</span>
+                      <div className="p-2 rounded-circle bg-light-green text-primary-green">
+                        <FaServer size={16} />
+                      </div>
+                    </div>
+                    <div className="fs-4 fw-bolder text-dark mb-2">99.98%</div>
+                    <span className="text-success fw-bold" style={{ fontSize: '11px' }}>All cloud nodes healthy</span>
+                  </div>
+                </div>
               </div>
 
-              <div className="input-group" style={{ maxWidth: '280px' }}>
-                <span className="input-group-text bg-white border-end-0"><FaSearch size={12} color="#999" /></span>
-                <input 
-                  type="text" 
-                  className="form-control border-start-0" 
-                  placeholder="Search staff members..." 
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ fontSize: '13px' }}
-                />
+              {/* Middle Row */}
+              <div className="row g-4 mb-4">
+                <div className="col-lg-8">
+                  <div className="card-auramed p-4 h-100 border-0 shadow-sm">
+                    <h6 className="fw-bold text-dark mb-4 d-flex align-items-center gap-2">
+                       <FaChartLine className="text-success" /> Enterprise Performance Metrics
+                    </h6>
+                    <div className="p-3 bg-light rounded-4 mb-4 border d-flex flex-column flex-md-row justify-content-between align-items-center text-center gap-3">
+                      <div className="flex-grow-1 border-md-end">
+                        <small className="text-muted fw-semibold d-block mb-1" style={{ fontSize: '11px', letterSpacing: '0.5px' }}>PRESCRIPTION ORDERS</small>
+                        <strong className="fs-4 text-dark">{orders.length + 42}</strong>
+                      </div>
+                      <div className="flex-grow-1 border-md-end border-md-start">
+                        <small className="text-muted fw-semibold d-block mb-1" style={{ fontSize: '11px', letterSpacing: '0.5px' }}>DOCTOR SESSIONS</small>
+                        <strong className="fs-4 text-dark">{doctorAppointments.length + 18}</strong>
+                      </div>
+                      <div className="flex-grow-1 border-md-start">
+                        <small className="text-muted fw-semibold d-block mb-1" style={{ fontSize: '11px', letterSpacing: '0.5px' }}>AVG BASKET VALUE</small>
+                        <strong className="fs-4 text-success">₹640</strong>
+                      </div>
+                    </div>
+                    <div className="d-flex align-items-center gap-3 p-3 rounded-3 border border-success-subtle bg-success-subtle text-success">
+                      <FaShieldAlt size={24} />
+                      <div>
+                        <div className="fw-bold" style={{ fontSize: '13px' }}>Compliance Active</div>
+                        <div style={{ fontSize: '12px' }}>Encrypted multi-tenant ledger active with automated fraud screening.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-lg-4">
+                  <div className="card-auramed p-4 h-100 border-0 shadow-sm">
+                    <h6 className="fw-bold text-dark mb-4">Quick Actions</h6>
+                    <div className="d-flex flex-column gap-3">
+                      <button onClick={() => setActiveTab('staff')} className="btn btn-light border text-start d-flex align-items-center justify-content-between p-3 rounded-3 hover-shadow">
+                        <span className="fw-semibold text-dark" style={{ fontSize: '13px' }}><FaUserPlus className="me-2 text-success" /> Staff Permissions</span>
+                        <FaArrowUp size={12} className="text-muted" style={{ transform: 'rotate(45deg)' }} />
+                      </button>
+                      <button onClick={() => setActiveTab('system_config')} className="btn btn-light border text-start d-flex align-items-center justify-content-between p-3 rounded-3 hover-shadow">
+                        <span className="fw-semibold text-dark" style={{ fontSize: '13px' }}><FaCog className="me-2 text-warning" /> System Settings</span>
+                        <FaArrowUp size={12} className="text-muted" style={{ transform: 'rotate(45deg)' }} />
+                      </button>
+                      <button onClick={() => setActiveTab('audit_logs')} className="btn btn-light border text-start d-flex align-items-center justify-content-between p-3 rounded-3 hover-shadow">
+                        <span className="fw-semibold text-dark" style={{ fontSize: '13px' }}><FaHistory className="me-2 text-danger" /> Security Audit Logs</span>
+                        <FaArrowUp size={12} className="text-muted" style={{ transform: 'rotate(45deg)' }} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+          )}
 
-            <div className="table-responsive">
-              <table className="table align-middle table-hover" style={{ fontSize: '13px' }}>
-                <thead className="table-light">
-                  <tr>
-                    <th>STAFF MEMBER</th>
-                    <th>ASSIGNED ROLE</th>
-                    <th>DEPARTMENT / TITLE</th>
-                    <th>STATUS</th>
-                    <th>LAST ACTIVE</th>
-                    <th className="text-end">SUPER ADMIN ACTIONS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {staffList
-                    .filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()) || s.email.toLowerCase().includes(searchTerm.toLowerCase()))
-                    .map(member => (
-                    <tr key={member.id}>
-                      <td>
-                        <div className="fw-bold text-dark">{member.name}</div>
-                        <div className="text-muted" style={{ fontSize: '11px' }}>{member.email}</div>
-                      </td>
-                      <td>
-                        <span className={`badge ${
-                          member.role === 'admin' ? 'bg-primary' :
-                          member.role === 'pharmacist' ? 'bg-success' :
-                          member.role === 'delivery' ? 'bg-warning text-dark' : 'bg-secondary'
-                        }`}>
-                          {member.role.toUpperCase()}
-                        </span>
-                      </td>
-                      <td>{member.title}</td>
-                      <td>
-                        <span className={`badge ${member.status === 'Active' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'}`}>
-                          {member.status}
-                        </span>
-                      </td>
-                      <td className="text-muted">{member.lastActive}</td>
-                      <td className="text-end">
-                        <div className="d-inline-flex gap-2">
-                          {member.role !== 'admin' && (
+          {/* ========================================================
+              2. STAFF & ACCESS CONTROL
+          ======================================================== */}
+          {activeTab === 'staff' && (
+            <div className="card-auramed p-4 border-0 shadow-sm animate-fade-in">
+              <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                <div>
+                  <h5 className="fw-bold text-dark mb-1">Administrative Directory</h5>
+                  <p className="text-secondary mb-0" style={{ fontSize: '13px' }}>
+                    Grant, promote, or revoke staff authorization levels.
+                  </p>
+                </div>
+                <div className="input-group" style={{ maxWidth: '300px' }}>
+                  <span className="input-group-text bg-white border-end-0"><FaSearch size={12} color="#999" /></span>
+                  <input 
+                    type="text" 
+                    className="form-control border-start-0" 
+                    placeholder="Search name or email..." 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ fontSize: '13px' }}
+                  />
+                </div>
+              </div>
+              
+              <div className="table-responsive">
+                <table className="table align-middle table-hover mb-0" style={{ fontSize: '13px' }}>
+                  <thead className="table-light text-muted" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    <tr>
+                      <th className="ps-0 py-3">Staff Member</th>
+                      <th className="py-3">Role</th>
+                      <th className="py-3">Department</th>
+                      <th className="py-3">Status</th>
+                      <th className="py-3">Last Active</th>
+                      <th className="text-end py-3">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {staffList
+                      .filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()) || s.email.toLowerCase().includes(searchTerm.toLowerCase()))
+                      .map(member => (
+                      <tr key={member.id}>
+                        <td className="ps-0 py-3">
+                          <div className="d-flex align-items-center gap-3">
+                            <div className="bg-light border text-secondary rounded-circle d-flex align-items-center justify-content-center fw-bold" style={{ width: '36px', height: '36px' }}>
+                              {member.name.charAt(0)}
+                            </div>
+                            <div>
+                              <div className="fw-bold text-dark">{member.name}</div>
+                              <div className="text-muted" style={{ fontSize: '12px' }}>{member.email}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`badge rounded-pill ${
+                            member.role === 'admin' ? 'bg-primary-subtle text-primary border border-primary-subtle' :
+                            member.role === 'pharmacist' ? 'bg-success-subtle text-success border border-success-subtle' :
+                            member.role === 'delivery' ? 'bg-warning-subtle text-warning border border-warning-subtle' : 'bg-secondary-subtle text-secondary border border-secondary-subtle'
+                          }`}>
+                            {member.role.toUpperCase()}
+                          </span>
+                        </td>
+                        <td className="text-secondary">{member.title}</td>
+                        <td>
+                          <span className={`badge ${member.status === 'Active' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'} border`}>
+                            {member.status}
+                          </span>
+                        </td>
+                        <td className="text-muted">{member.lastActive}</td>
+                        <td className="text-end">
+                          <div className="d-inline-flex gap-2">
+                            {member.role !== 'admin' && (
+                              <button
+                                onClick={() => handlePromoteRole(member.id, 'admin')}
+                                className="btn btn-sm btn-outline-success fw-semibold"
+                                style={{ fontSize: '11px' }}
+                              >
+                                Promote
+                              </button>
+                            )}
                             <button
-                              onClick={() => handlePromoteRole(member.id, 'admin')}
-                              className="btn btn-sm btn-outline-primary"
-                              title="Promote to Store Admin"
+                              onClick={() => handleToggleStatus(member.id)}
+                              className={`btn btn-sm ${member.status === 'Active' ? 'btn-outline-danger' : 'btn-outline-success'}`}
                               style={{ fontSize: '11px' }}
                             >
-                              Promote to Admin
+                              {member.status === 'Active' ? 'Suspend' : 'Activate'}
                             </button>
-                          )}
-                          <button
-                            onClick={() => handleToggleStatus(member.id)}
-                            className={`btn btn-sm ${member.status === 'Active' ? 'btn-outline-danger' : 'btn-outline-success'}`}
-                            style={{ fontSize: '11px' }}
-                          >
-                            {member.status === 'Active' ? 'Suspend' : 'Activate'}
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* 3. PLATFORM GOVERNANCE & TAX */}
-        {activeTab === 'system_config' && (
-          <div className="card-auramed p-4 bg-white" style={{ maxWidth: '780px' }}>
-            <h5 className="fw-bold text-dark mb-1">Global Platform Governance Settings</h5>
-            <p className="text-secondary mb-4" style={{ fontSize: '13px' }}>
-              Define enterprise thresholds, express shipping policies, and taxation variables.
-            </p>
-
-            {savedNotice && (
-              <div className="alert alert-success d-flex align-items-center gap-2 py-2" role="alert">
-                <FaCheckCircle /> Platform settings saved and propagated to live production nodes!
-              </div>
-            )}
-
-            <form onSubmit={handleSaveConfig}>
-              <div className="row g-3 mb-4">
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold" style={{ fontSize: '13px' }}>Free Delivery Threshold (₹)</label>
-                  <input 
-                    type="number" 
-                    className="form-control" 
-                    value={config.freeDeliveryThreshold}
-                    onChange={(e) => setConfig({ ...config, freeDeliveryThreshold: Number(e.target.value) })}
-                  />
-                  <small className="text-muted">Orders above this amount receive complimentary delivery.</small>
+          {/* ========================================================
+              3. PLATFORM GOVERNANCE & TAX
+          ======================================================== */}
+          {activeTab === 'system_config' && (
+            <div className="card-auramed p-4 border-0 shadow-sm animate-fade-in" style={{ maxWidth: '800px' }}>
+              <div className="d-flex align-items-center gap-3 mb-4">
+                <div className="p-3 bg-light-green text-primary-green rounded-circle">
+                  <FaCog size={24} />
                 </div>
-
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold" style={{ fontSize: '13px' }}>Standard / Express Delivery Fee (₹)</label>
-                  <input 
-                    type="number" 
-                    className="form-control" 
-                    value={config.expressDeliveryFee}
-                    onChange={(e) => setConfig({ ...config, expressDeliveryFee: Number(e.target.value) })}
-                  />
-                  <small className="text-muted">Applied when cart subtotal is under threshold.</small>
-                </div>
-
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold" style={{ fontSize: '13px' }}>Doctor Platform Convenience Fee (%)</label>
-                  <input 
-                    type="number" 
-                    className="form-control" 
-                    value={config.platformConveniencePct}
-                    onChange={(e) => setConfig({ ...config, platformConveniencePct: Number(e.target.value) })}
-                  />
-                </div>
-
-                <div className="col-md-6">
-                  <label className="form-label fw-semibold" style={{ fontSize: '13px' }}>GST / Statutory Medical Tax (%)</label>
-                  <input 
-                    type="number" 
-                    className="form-control" 
-                    value={config.taxGstPct}
-                    onChange={(e) => setConfig({ ...config, taxGstPct: Number(e.target.value) })}
-                  />
+                <div>
+                  <h5 className="fw-bold text-dark mb-1">Global Platform Governance</h5>
+                  <p className="text-secondary mb-0" style={{ fontSize: '13px' }}>
+                    Define enterprise thresholds, shipping policies, and taxation.
+                  </p>
                 </div>
               </div>
 
-              <div className="p-3 rounded-3 bg-light border mb-4">
-                <div className="form-check form-switch mb-2">
-                  <input 
-                    className="form-check-input" 
-                    type="checkbox" 
-                    id="maintMode"
-                    checked={config.maintenanceMode}
-                    onChange={(e) => setConfig({ ...config, maintenanceMode: e.target.checked })}
-                  />
-                  <label className="form-check-label fw-semibold" htmlFor="maintMode" style={{ fontSize: '13px' }}>
-                    Emergency Platform Maintenance Mode (Locks checkout)
-                  </label>
+              {savedNotice && (
+                <div className="alert alert-success d-flex align-items-center gap-2 py-2 border-success-subtle bg-success-subtle text-success" role="alert">
+                  <FaCheckCircle /> Platform settings saved and propagated to live production nodes!
                 </div>
-                <div className="form-check form-switch">
-                  <input 
-                    className="form-check-input" 
-                    type="checkbox" 
-                    id="autoRx"
-                    checked={config.autoApproveRx}
-                    onChange={(e) => setConfig({ ...config, autoApproveRx: e.target.checked })}
-                  />
-                  <label className="form-check-label fw-semibold" htmlFor="autoRx" style={{ fontSize: '13px' }}>
-                    Automated AI Prescription OCR Pre-Verification
-                  </label>
+              )}
+
+              <form onSubmit={handleSaveConfig}>
+                <div className="row g-4 mb-4">
+                  <div className="col-md-6">
+                    <label className="form-label fw-bold text-dark" style={{ fontSize: '12px' }}>Free Delivery Threshold (₹)</label>
+                    <input 
+                      type="number" 
+                      className="form-control bg-light" 
+                      value={config.freeDeliveryThreshold}
+                      onChange={(e) => setConfig({ ...config, freeDeliveryThreshold: Number(e.target.value) })}
+                    />
+                    <small className="text-muted mt-1 d-block" style={{ fontSize: '11px' }}>Orders above this amount get free delivery.</small>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className="form-label fw-bold text-dark" style={{ fontSize: '12px' }}>Standard Delivery Fee (₹)</label>
+                    <input 
+                      type="number" 
+                      className="form-control bg-light" 
+                      value={config.expressDeliveryFee}
+                      onChange={(e) => setConfig({ ...config, expressDeliveryFee: Number(e.target.value) })}
+                    />
+                    <small className="text-muted mt-1 d-block" style={{ fontSize: '11px' }}>Applied when cart is under threshold.</small>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className="form-label fw-bold text-dark" style={{ fontSize: '12px' }}>Convenience Fee (%)</label>
+                    <input 
+                      type="number" 
+                      className="form-control bg-light" 
+                      value={config.platformConveniencePct}
+                      onChange={(e) => setConfig({ ...config, platformConveniencePct: Number(e.target.value) })}
+                    />
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className="form-label fw-bold text-dark" style={{ fontSize: '12px' }}>Statutory Medical Tax (%)</label>
+                    <input 
+                      type="number" 
+                      className="form-control bg-light" 
+                      value={config.taxGstPct}
+                      onChange={(e) => setConfig({ ...config, taxGstPct: Number(e.target.value) })}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <button type="submit" className="btn btn-dark fw-bold px-4 py-2">
-                Save Global Configuration
-              </button>
-            </form>
-          </div>
-        )}
+                <div className="p-4 rounded-4 bg-light border mb-4">
+                  <h6 className="fw-bold text-dark mb-3" style={{ fontSize: '13px' }}>Critical System Toggles</h6>
+                  
+                  <div className="form-check form-switch mb-3">
+                    <input 
+                      className="form-check-input" 
+                      type="checkbox" 
+                      id="maintMode"
+                      checked={config.maintenanceMode}
+                      onChange={(e) => setConfig({ ...config, maintenanceMode: e.target.checked })}
+                    />
+                    <label className="form-check-label fw-semibold text-dark ms-2" htmlFor="maintMode" style={{ fontSize: '13px' }}>
+                      Emergency Platform Maintenance Mode <span className="text-danger">(Locks checkout)</span>
+                    </label>
+                  </div>
+                  
+                  <div className="form-check form-switch">
+                    <input 
+                      className="form-check-input" 
+                      type="checkbox" 
+                      id="autoRx"
+                      checked={config.autoApproveRx}
+                      onChange={(e) => setConfig({ ...config, autoApproveRx: e.target.checked })}
+                    />
+                    <label className="form-check-label fw-semibold text-dark ms-2" htmlFor="autoRx" style={{ fontSize: '13px' }}>
+                      Automated AI Prescription OCR Pre-Verification
+                    </label>
+                  </div>
+                </div>
 
-        {/* 4. SECURITY AUDIT LOGS */}
-        {activeTab === 'audit_logs' && (
-          <div className="card-auramed p-4 bg-white">
-            <h5 className="fw-bold text-dark mb-1">System Security & Access Audit Trail</h5>
-            <p className="text-secondary mb-4" style={{ fontSize: '13px' }}>
-              Immutable append-only chronological log of all administrative actions, logins, and permission changes.
-            </p>
-
-            <div className="table-responsive">
-              <table className="table align-middle table-sm" style={{ fontSize: '12px' }}>
-                <thead className="table-light">
-                  <tr>
-                    <th>EVENT ID</th>
-                    <th>ACTION / EVENT</th>
-                    <th>AUTHORIZED ACTOR</th>
-                    <th>TIMESTAMP</th>
-                    <th>NETWORK IP</th>
-                    <th>STATUS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {auditLogs.map(log => (
-                    <tr key={log.id}>
-                      <td className="fw-mono text-muted">{log.id}</td>
-                      <td className="fw-bold text-dark">{log.action}</td>
-                      <td>{log.actor}</td>
-                      <td className="text-muted">{log.timestamp}</td>
-                      <td><code>{log.ip}</code></td>
-                      <td><span className="badge bg-success-subtle text-success">{log.status}</span></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                <button type="submit" className="btn btn-auramed fw-bold px-4 py-2 d-flex align-items-center gap-2">
+                  <FaCheckCircle /> Save Configuration
+                </button>
+              </form>
             </div>
-          </div>
-        )}
+          )}
 
-      </div>
+          {/* ========================================================
+              4. SECURITY AUDIT LOGS
+          ======================================================== */}
+          {activeTab === 'audit_logs' && (
+            <div className="card-auramed p-4 border-0 shadow-sm animate-fade-in">
+              <div className="d-flex align-items-center gap-3 mb-4">
+                <div className="p-3 bg-danger-subtle text-danger rounded-circle">
+                  <FaLock size={24} />
+                </div>
+                <div>
+                  <h5 className="fw-bold text-dark mb-1">System Security Audit Trail</h5>
+                  <p className="text-secondary mb-0" style={{ fontSize: '13px' }}>
+                    Immutable chronological log of administrative actions and logins.
+                  </p>
+                </div>
+              </div>
+
+              <div className="table-responsive rounded-3 border">
+                <table className="table align-middle table-hover mb-0" style={{ fontSize: '12px' }}>
+                  <thead className="table-light text-muted" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    <tr>
+                      <th className="ps-3 py-3">Event ID</th>
+                      <th className="py-3">Action / Event</th>
+                      <th className="py-3">Actor</th>
+                      <th className="py-3">Timestamp</th>
+                      <th className="py-3">Network IP</th>
+                      <th className="pe-3 py-3">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {auditLogs.map(log => (
+                      <tr key={log.id}>
+                        <td className="ps-3 text-muted fw-mono">{log.id}</td>
+                        <td className="fw-bold text-dark">{log.action}</td>
+                        <td>{log.actor}</td>
+                        <td className="text-muted">{log.timestamp}</td>
+                        <td><code className="bg-light px-2 py-1 rounded text-danger">{log.ip}</code></td>
+                        <td className="pe-3"><span className="badge bg-success-subtle text-success border border-success-subtle">{log.status}</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </main>
+
+      {/* GLOBAL CSS FOR THIS COMPONENT */}
+      <style jsx>{`
+        .admin-layout-wrapper {
+          min-height: 100vh;
+          display: flex;
+          width: 100%;
+          position: relative;
+          font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        .admin-sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          z-index: 1050;
+          transition: transform 0.3s ease-in-out;
+        }
+        .admin-main-content {
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+          min-width: 0;
+          height: 100vh;
+          transition: margin-left 0.3s ease-in-out;
+        }
+        .admin-header {
+          height: 70px;
+          flex-shrink: 0;
+          position: sticky;
+          top: 0;
+          z-index: 1030;
+        }
+        .admin-body-scroll {
+          flex-grow: 1;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+        
+        /* Mobile specific fixes */
+        @media (max-width: 991px) {
+          .admin-sidebar {
+            transform: translateX(-100%);
+          }
+          .admin-sidebar.mobile-open {
+            transform: translateX(0);
+          }
+          .admin-main-content {
+            margin-left: 0 !important;
+          }
+        }
+        
+        /* Custom UI Classes */
+        .hover-bg-light:hover { background-color: #f1f5f9 !important; }
+        .hover-shadow:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .fw-mono { font-family: monospace; }
+        
+        /* Fade In Animation */
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(5px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        /* Border helpers for flex stats */
+        @media (min-width: 768px) {
+          .border-md-end { border-right: 1px solid #dee2e6 !important; }
+          .border-md-start { border-left: 1px solid #dee2e6 !important; }
+        }
+      `}</style>
     </div>
   );
 }

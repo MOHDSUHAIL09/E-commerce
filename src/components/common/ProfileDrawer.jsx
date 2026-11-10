@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaTimes, FaChevronRight, FaUserFriends, FaMapMarkerAlt, 
-  FaBoxOpen, FaCreditCard, FaAward, FaQuestionCircle, FaSignOutAlt 
+  FaBoxOpen, FaCreditCard, FaAward, FaQuestionCircle, FaSignOutAlt,
+  FaHeart, FaTicketAlt, FaGift
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 
@@ -35,21 +36,8 @@ export default function ProfileDrawer({ isOpen, onClose, onOpenLogin }) {
 
   const menuRows = [
     {
-      id: 'super-admin',
-      label: 'Super Admin Portal',
-      icon: (
-        <div 
-          className="rounded-circle d-flex align-items-center justify-content-center text-white" 
-          style={{ width: '22px', height: '22px', backgroundColor: '#8E44AD' }}
-        >
-          👑
-        </div>
-      ),
-      onClick: () => handleNavigate('/super-admin-dashboard')
-    },
-    {
       id: 'admin-dashboard',
-      label: 'Store Admin Panel',
+      label: 'Admin Panel',
       icon: (
         <div 
           className="rounded-circle d-flex align-items-center justify-content-center text-white" 
@@ -60,48 +48,56 @@ export default function ProfileDrawer({ isOpen, onClose, onOpenLogin }) {
       ),
       onClick: () => handleNavigate('/admin-dashboard')
     },
-    {
-      id: 'manage-profiles',
-      label: 'Manage Profiles',
-      icon: <FaUserFriends size={18} color="#1F2937" />,
-      onClick: () => handleNavigate('/customer-dashboard', { tab: 'profile' })
+        {
+      id: 'my-orders',
+      label: 'My Orders',
+      icon: <FaBoxOpen size={18} color="#1F2937" />,
+      onClick: () => handleNavigate('/Profile', { tab: 'orders' })
     },
     {
       id: 'address-book',
       label: 'Address Book',
       icon: <FaMapMarkerAlt size={18} color="#1F2937" />,
-      onClick: () => handleNavigate('/customer-dashboard', { tab: 'addresses' })
+      onClick: () => handleNavigate('/Profile', { tab: 'addresses' })
+    },
+
+    // --- FIXED IDs ---
+    {
+      id: 'coupons',
+      label: 'Coupons',
+      icon: <FaTicketAlt size={18} color="#1F2937" />,
+      onClick: () => handleNavigate('/Profile', { tab: 'coupons' })
     },
     {
-      id: 'my-orders',
-      label: 'My Orders',
-      icon: <FaBoxOpen size={18} color="#1F2937" />,
-      onClick: () => handleNavigate('/customer-dashboard', { tab: 'orders' })
+      id: 'gift-cards',
+      label: 'Gift Cards',
+      icon: <FaGift size={18} color="#1F2937" />,
+      onClick: () => handleNavigate('/Profile', { tab: 'giftcards' })
     },
-    {
-      id: 'transactions-payments',
-      label: 'Transactions and Payments',
-      icon: <FaCreditCard size={18} color="#1F2937" />,
-      onClick: () => handleNavigate('/customer-dashboard', { tab: 'overview' })
-    },
-    {
-      id: 'membership',
-      label: 'CureOn Membership',
-      icon: (
-        <div 
-          className="rounded-circle d-flex align-items-center justify-content-center text-white" 
-          style={{ width: '20px', height: '20px', backgroundColor: '#F59E0B' }}
-        >
-          <FaAward size={12} />
-        </div>
-      ),
-      onClick: () => handleNavigate('/customer-dashboard', { tab: 'overview' })
-    },
+    // {
+    //   id: 'transactions-payments',
+    //   label: 'Transactions and Payments',
+    //   icon: <FaCreditCard size={18} color="#1F2937" />,
+    //   onClick: () => handleNavigate('/Profile', { tab: 'overview' })
+    // },
+    // {
+    //   id: 'membership',
+    //   label: 'CureOn Membership',
+    //   icon: (
+    //     <div 
+    //       className="rounded-circle d-flex align-items-center justify-content-center text-white" 
+    //       style={{ width: '20px', height: '20px', backgroundColor: '#F59E0B' }}
+    //     >
+    //       <FaAward size={12} />
+    //     </div>
+    //   ),
+    //   onClick: () => handleNavigate('/Profile', { tab: 'overview' })
+    // },
     {
       id: 'need-help',
       label: 'Need Help',
       icon: <FaQuestionCircle size={18} color="#1F2937" />,
-      onClick: () => handleNavigate('/customer-dashboard', { tab: 'overview' })
+      onClick: () => handleNavigate('/Profile', { tab: 'overview' })
     },
     {
       id: 'logout',
@@ -125,7 +121,7 @@ export default function ProfileDrawer({ isOpen, onClose, onOpenLogin }) {
             onClick={onClose}
           />
 
-          {/* Sliding Panel from Right (exact layout from image_121d632e) */}
+          {/* Sliding Panel from Right */}
           <motion.div
             className="position-fixed top-0 end-0 h-100 bg-white shadow-2xl d-flex flex-column"
             style={{
@@ -152,7 +148,7 @@ export default function ProfileDrawer({ isOpen, onClose, onOpenLogin }) {
               </button>
             </div>
 
-            {/* User Phone / ID Header (matches image_121d632e: +917078264972) */}
+            {/* User Phone / ID Header */}
             <div className="px-4 pb-3">
               {isLoggedIn ? (
                 <div>
@@ -187,7 +183,7 @@ export default function ProfileDrawer({ isOpen, onClose, onOpenLogin }) {
               )}
             </div>
 
-            {/* List Menu with Dividers (matches image_121d632e) */}
+            {/* List Menu with Dividers */}
             <div className="border-top flex-grow-1">
               {menuRows.map((row) => (
                 <button

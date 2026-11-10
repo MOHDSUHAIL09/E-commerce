@@ -23,7 +23,7 @@ export default function AnnouncementBar({ onOpenRoleModal }) {
           {/* Right: Hotline */}
           <div className="d-flex align-items-center gap-3">
             <a href="tel:+18002872633" className="text-white text-decoration-none d-inline-flex align-items-center gap-1" style={{ fontSize: '12px' }}>
-              <FaPhoneAlt size={11} /> 24/7 Pharmacist Helpline: <strong>1-800-AURAMED</strong>
+              <FaPhoneAlt size={11} /> 24/7 Pharmacist Helpline: <strong>1-800-CUREON</strong>
             </a>
           </div>
         </div>

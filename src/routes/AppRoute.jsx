@@ -13,13 +13,13 @@ import PrescriptionPage from '../pages/Prescription/PrescriptionPage';
 import DoctorsPage from '../pages/Doctors/DoctorsPage';
 import LabTestsPage from '../pages/LabTests/LabTestsPage';
 import WishlistPage from '../pages/Wishlist/WishlistPage';
-import CustomerDashboard from '../pages/CustomerDashboard/CustomerDashboard';
+import CustomerProfile from '../pages/Profile/CustomerProfile';
 import AdminDashboard from '../pages/AdminDashboard/AdminDashboard';
 import SuperAdminDashboard from '../pages/AdminDashboard/SuperAdminDashboard';
-import PharmacistDashboard from '../pages/PharmacistDashboard/PharmacistDashboard';
 import DeliveryDashboard from '../pages/DeliveryDashboard/DeliveryDashboard';
 import LoginPage from '../pages/Auth/LoginPage';
 import RegisterPage from '../pages/Auth/RegisterPage';
+
 
 export default function AppRoute() {
   return (
@@ -33,18 +33,18 @@ export default function AppRoute() {
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/prescription" element={<PrescriptionPage />} />
       <Route path="/prescriptions" element={<Navigate to="/prescription" replace />} />
-      <Route path="/insurance" element={<CustomerDashboard />} />
+      <Route path="/insurance" element={<CustomerProfile />} />
       <Route path="/doctors" element={<DoctorsPage />} />
       <Route path="/lab-tests" element={<LabTestsPage />} />
       <Route path="/wishlist" element={<WishlistPage />} />
-      <Route path="/customer-dashboard" element={<CustomerDashboard />} />
+      <Route path="/Profile" element={<CustomerProfile />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/super-admin-dashboard" element={<SuperAdminDashboard />} />
-      <Route path="/pharmacist-dashboard" element={<PharmacistDashboard />} />
       <Route path="/delivery-dashboard" element={<DeliveryDashboard />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
+      
     </Routes>
   );
 }

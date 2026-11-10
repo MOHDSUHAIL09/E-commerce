@@ -17,7 +17,7 @@ export default function RoleSwitcherModal({ isOpen, onClose }) {
       subtitle: 'Standard Healthcare Consumer',
       description: 'Browse catalog, upload prescriptions, book doctors & lab tests, checkout with demo coupons, track deliveries.',
       icon: <FaUser size={22} />,
-      dashboardUrl: '/customer-dashboard',
+      dashboardUrl: '/Profile',
       color: '#159B64'
     },
     {
@@ -42,7 +42,7 @@ export default function RoleSwitcherModal({ isOpen, onClose }) {
     },
     {
       id: 'admin',
-      title: 'Store Admin Panel',
+      title: 'Admin Panel',
       name: 'Elena Rostova',
       subtitle: 'Operations & Inventory Director',
       description: 'Comprehensive business KPIs, sales charts, product CRUD (add/edit medicines), inventory control, and system reports.',

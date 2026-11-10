@@ -27,16 +27,15 @@ export default function DeliveryDashboard() {
     e.preventDefault();
     setSmsSent(true);
     setTimeout(() => {
-      setSmsSent(false);
-      setContactModal(null);
+    setSmsSent(false);
+    setContactModal(null);
     }, 2000);
   };
 
   return (
     <div className="py-4" style={{ backgroundColor: '#F8FAF9' }}>
-      <div className="container-xl">
-        
-        {/* Header */}
+      <div className="container-xl">        
+      {/* Header */}
         <div className="card-auramed p-4 mb-4" style={{ background: 'linear-gradient(135deg, #172B24 0%, #0E3626 100%)', color: '#FFFFFF' }}>
           <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div className="d-flex align-items-center gap-3">

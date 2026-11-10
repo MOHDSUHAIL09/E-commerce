@@ -589,7 +589,7 @@ export default function DoctorsPage() {
                     <div className="fw-bold text-dark" style={{ fontSize: '11px' }}>AuraMed MD</div>
                     <div className="text-success fw-bold" style={{ fontSize: '10px' }}> Video Live</div>
                   </div>
-                  
+
                   <div 
                     className="p-3 bg-white rounded-3 shadow-sm text-center border"
                     style={{ width: '120px', transform: 'rotate(3deg)' }}
@@ -1157,7 +1157,7 @@ export default function DoctorsPage() {
                         Done
                       </button>
                       <Link 
-                        to="/customer-dashboard" 
+                        to="/Profile" 
                         className="btn btn-outline-success px-4 py-2"
                         style={{ borderRadius: '6px' }}
                       >

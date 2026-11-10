@@ -146,7 +146,7 @@ export default function MobileProfileDrawer({ isOpen, onClose, onOpenLogin, onOp
             <div className="py-2 border-bottom">
               <button
                 type="button"
-                onClick={() => handleNavigate('/customer-dashboard', { tab: 'orders' })}
+                onClick={() => handleNavigate('/Profile', { tab: 'orders' })}
                 className="btn w-100 text-start px-3 py-2.5 d-flex align-items-center justify-content-between border-0 bg-transparent"
                 style={{ color: '#282C3F', fontSize: '14.5px', fontWeight: '500' }}
               >
@@ -180,7 +180,7 @@ export default function MobileProfileDrawer({ isOpen, onClose, onOpenLogin, onOp
 
               <button
                 type="button"
-                onClick={() => handleNavigate('/customer-dashboard', { tab: 'overview' })}
+                onClick={() => handleNavigate('/Profile', { tab: 'overview' })}
                 className="btn w-100 text-start px-3 py-2.5 d-flex align-items-center justify-content-between border-0 bg-transparent"
                 style={{ color: '#282C3F', fontSize: '14.5px', fontWeight: '500' }}
               >
@@ -190,7 +190,7 @@ export default function MobileProfileDrawer({ isOpen, onClose, onOpenLogin, onOp
 
               <button
                 type="button"
-                onClick={() => handleNavigate('/customer-dashboard', { tab: 'overview' })}
+                onClick={() => handleNavigate('/Profile', { tab: 'overview' })}
                 className="btn w-100 text-start px-3 py-2.5 d-flex align-items-center justify-content-between border-0 bg-transparent"
                 style={{ color: '#282C3F', fontSize: '14.5px', fontWeight: '500' }}
               >
@@ -211,7 +211,7 @@ export default function MobileProfileDrawer({ isOpen, onClose, onOpenLogin, onOp
             <div className="py-2 border-bottom">
               <button
                 type="button"
-                onClick={() => handleNavigate('/customer-dashboard', { tab: 'overview' })}
+                onClick={() => handleNavigate('/Profile', { tab: 'overview' })}
                 className="btn w-100 text-start px-3 py-2.5 d-flex align-items-center justify-content-between border-0 bg-transparent"
                 style={{ color: '#282C3F', fontSize: '14.5px', fontWeight: '500' }}
               >
@@ -231,7 +231,7 @@ export default function MobileProfileDrawer({ isOpen, onClose, onOpenLogin, onOp
 
               <button
                 type="button"
-                onClick={() => handleNavigate('/customer-dashboard', { tab: 'addresses' })}
+                onClick={() => handleNavigate('/Profile', { tab: 'addresses' })}
                 className="btn w-100 text-start px-3 py-2.5 d-flex align-items-center justify-content-between border-0 bg-transparent"
                 style={{ color: '#282C3F', fontSize: '14.5px', fontWeight: '500' }}
               >
@@ -241,7 +241,7 @@ export default function MobileProfileDrawer({ isOpen, onClose, onOpenLogin, onOp
 
               <button
                 type="button"
-                onClick={() => handleNavigate('/customer-dashboard', { tab: 'addresses' })}
+                onClick={() => handleNavigate('/Profile', { tab: 'addresses' })}
                 className="btn w-100 text-start px-3 py-2.5 d-flex align-items-center justify-content-between border-0 bg-transparent"
                 style={{ color: '#282C3F', fontSize: '14.5px', fontWeight: '500' }}
               >
@@ -251,7 +251,7 @@ export default function MobileProfileDrawer({ isOpen, onClose, onOpenLogin, onOp
 
               <button
                 type="button"
-                onClick={() => handleNavigate('/customer-dashboard', { tab: 'addresses' })}
+                onClick={() => handleNavigate('/Profile', { tab: 'addresses' })}
                 className="btn w-100 text-start px-3 py-2.5 d-flex align-items-center justify-content-between border-0 bg-transparent"
                 style={{ color: '#282C3F', fontSize: '14.5px', fontWeight: '500' }}
               >
@@ -264,7 +264,7 @@ export default function MobileProfileDrawer({ isOpen, onClose, onOpenLogin, onOp
             <div className="py-2 mt-auto">
               <button
                 type="button"
-                onClick={() => handleNavigate('/customer-dashboard', { tab: 'profile' })}
+                onClick={() => handleNavigate('/Profile', { tab: 'profile' })}
                 className="btn w-100 text-start px-3 py-2.5 d-flex align-items-center justify-content-between border-0 bg-transparent fw-bold"
                 style={{ color: '#005F40', fontSize: '14.5px' }}
               >

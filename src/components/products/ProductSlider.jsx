@@ -100,7 +100,7 @@ export default function ProductSlider({ title, subtitle, products = [], viewAllL
                 key={p.id}
                 className="bg-white rounded-3 p-2.5 p-sm-3 d-flex flex-column transition-all responsive-slider-card"
                 style={{
-                  border: '1px solid #E5ECE8',
+                  border: '1px solid #E5ECE8',  
                   borderRadius: '12px',
                   scrollSnapAlign: 'start',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
@@ -256,7 +256,7 @@ export default function ProductSlider({ title, subtitle, products = [], viewAllL
 
 
                 {/* Price Section */}
-                <div className="mt-auto pt-2 border-top">
+                <div className="mt-auto pt-2">
                   <div className="d-flex align-items-center gap-2 mb-1" style={{ fontSize: '11.5px' }}>
                     <span className="text-decoration-line-through text-muted">
                       MRP {currencySymbol}{displayMrp}

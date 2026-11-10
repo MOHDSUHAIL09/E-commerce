@@ -17,7 +17,7 @@ export default function RegisterPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     login('customer');
-    navigate('/customer-dashboard');
+    navigate('/Profile');
   };
 
   return (

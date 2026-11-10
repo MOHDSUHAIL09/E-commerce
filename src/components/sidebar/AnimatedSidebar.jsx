@@ -48,11 +48,10 @@ export default function AnimatedSidebar({ isOpen, onClose, onOpenRoleModal }) {
     { title: 'Book Diagnostic Lab Tests', path: '/lab-tests', icon: <FaFlask /> },
     { title: 'My Shopping Cart', path: '/cart', icon: <FaShoppingCart />, badge: itemsCount > 0 ? `${itemsCount}` : null },
     { title: 'My Wishlist', path: '/wishlist', icon: <FaHeart />, badge: wishlistCount > 0 ? `${wishlistCount}` : null },
-    { title: 'Compare Medicines', path: '/compare', icon: <FaBoxes /> }
   ];
 
   const dashboardLinks = [
-    { title: 'Customer Dashboard', path: '/customer-dashboard', icon: <FaUser /> },
+    { title: 'Customer profile', path: '/Profile', icon: <FaUser /> },
     { title: 'Admin Management', path: '/admin-dashboard', icon: <FaCog /> },
     { title: 'Pharmacist Panel', path: '/pharmacist-dashboard', icon: <FaClipboardCheck /> },
     { title: 'Delivery Partner Portal', path: '/delivery-dashboard', icon: <FaShippingFast /> }
@@ -325,7 +324,7 @@ export default function AnimatedSidebar({ isOpen, onClose, onOpenRoleModal }) {
               </div>
               <div className="d-flex align-items-center gap-2 text-secondary" style={{ fontSize: '12px' }}>
                 <FaPhoneAlt color="#159B64" />
-                <span>Helpline: <strong>1-800-AURAMED</strong></span>
+                <span>Helpline: <strong>1-800-CUREON</strong></span>
               </div>
             </div>
           </motion.aside>

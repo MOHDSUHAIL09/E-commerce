@@ -13,7 +13,7 @@ export default function LoginPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     login('customer');
-    navigate('/customer-dashboard');
+    navigate('/Profile');
   };
 
   const handleQuickRole = (role, redirectPath) => {
@@ -109,7 +109,7 @@ export default function LoginPage() {
                 <div className="row g-2">
                   <div className="col-6">
                     <button
-                      onClick={() => handleQuickRole('customer', '/customer-dashboard')}
+                      onClick={() => handleQuickRole('customer', '/Profile')}
                       className="btn btn-sm btn-outline-success w-100 d-flex align-items-center justify-content-center gap-1"
                       style={{ fontSize: '11px' }}
                     >

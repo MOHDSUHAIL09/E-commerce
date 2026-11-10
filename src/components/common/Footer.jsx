@@ -101,7 +101,7 @@ export default function Footer() {
               <li><Link to="/doctors">Find Doctors</Link></li>
               <li><Link to="/lab-tests">Diagnostic Lab Tests</Link></li>
               <li><Link to="/categories">Categories Index</Link></li>
-              <li><Link to="/compare">Compare Products</Link></li>
+      
             </ul>
           </div>
 
@@ -126,7 +126,7 @@ export default function Footer() {
               Account & Portals
             </h6>
             <ul className="list-unstyled mb-0 d-flex flex-column gap-2" style={{ fontSize: '13px' }}>
-              <li><Link to="/customer-dashboard">Customer Dashboard</Link></li>
+              <li><Link to="/Profile">Customer Dashboard</Link></li>
               <li><Link to="/admin-dashboard">Admin Management</Link></li>
               <li><Link to="/pharmacist-dashboard">Pharmacist Portal</Link></li>
               <li><Link to="/delivery-dashboard">Delivery Partner Hub</Link></li>

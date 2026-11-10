@@ -300,7 +300,7 @@ export default function LoginDrawer({ isOpen, onClose }) {
                   >
                     <FaCheckCircle size={36} />
                   </div>
-                  <h3 className="fw-bold text-dark mb-2">Welcome to AuraMed!</h3>
+                  <h3 className="fw-bold text-dark mb-2">Welcome to Cureon!</h3>
                   <p className="text-secondary" style={{ fontSize: '14px' }}>
                     You have successfully signed in. Loading your health records...
                   </p>

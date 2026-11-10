@@ -61,7 +61,7 @@ export default function MobileBottomNavbar({ onOpenLogin = null, onOpenWishlist 
     {
       id: 'insurance',
       label: 'Insurance',
-      path: '/customer-dashboard',
+      path: '/Profile',
       match: ['/insurance'],
       icon: (isActive) => (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">

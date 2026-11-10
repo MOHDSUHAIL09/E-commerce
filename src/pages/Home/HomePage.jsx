@@ -8,7 +8,6 @@ import {
 import ProductSlider from '../../components/products/ProductSlider';
 import ProductCard from '../../components/products/ProductCard';
 import QuickViewModal from '../../components/common/QuickViewModal';
-import CategorySlider from '../../components/home/CategorySlider';
 import PopularBrandsSection from '../../components/home/PopularBrandsSection';
 import { useHealthcare } from '../../context/HealthcareContext';
 import { CATEGORIES } from '../Categories/CategoriesPage';
@@ -19,6 +18,8 @@ import { LAB_TESTS } from '../LabTests/LabTestsPage';
 import HeroImage1 from '../../assets/images/cureonhero-img1.png';
 import HeroImage2 from '../../assets/images/cureonhero-img2.png'; // Slide 2 ki image ka naam yahan daalo
 import HeroImage3 from '../../assets/images/cureonhero-img3.png'; // Slide 3 ki image ka naam yahan daalo
+import VitaminsSupplements from '@/src/components/home/VitaminsSupplements';
+import ShopByCategory from '@/src/components/home/ShopByCategory';
 
 // ==========================================
 // 1. HERO SLIDER COMPONENT
@@ -29,9 +30,10 @@ const SLIDES = [
     badge: '100% GENUINE MEDICINES',
     heading: (
       <>
-        Your Health, Our<br />
+
+       Your Health, Our Passion. Your Care,<br />
         <span style={{ color: '#159B64', position: 'relative' }}>
-          Priority
+    Our Promise.
           <svg width="120" height="12" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', bottom: '-5px', left: 0 }}>
             <path d="M2 9.5C30 3.5 70 1.5 118 6.5" stroke="#159B64" strokeWidth="3.5" strokeLinecap="round" />
           </svg>
@@ -49,7 +51,7 @@ const SLIDES = [
   {
     id: 2,
     badge: '24/7 ONLINE CONSULTATION',
-    heading: 'Consult Top Doctors Online in 15 Mins',
+    heading: 'Consult Top Doctors Online Anytime, Anywhere',
     description: 'Connect via encrypted video with experienced physicians, cardiologists, and pediatricians. Receive verified digital prescriptions instantly.',
     buttonText: 'Book Doctor Consultation',
     buttonLink: '/doctors',
@@ -106,10 +108,6 @@ function HeroSlider({ slides = SLIDES }) {
   return (
     <div
       className="position-relative overflow-hidden w-100"
-      style={{
-        minHeight: '600px',
-        backgroundColor: '#EAF8F2'
-      }}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
@@ -125,15 +123,15 @@ function HeroSlider({ slides = SLIDES }) {
           transition={{ duration: 0.6 }}
           className="w-100 d-flex align-items-center position-relative"
           style={{
-            minHeight: '600px',
+            height: '80vh',
             backgroundImage: `${slide.bgGradient}, url(${slide.bgImage})`,
             backgroundPosition: 'right center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat'
           }}
         >
-          <div className="container-xl position-relative z-1 py-4 py-md-5">
-            <div className="row align-items-center" style={{ minHeight: '450px' }}>
+          <div className="container-xl position-relative z-1">
+            <div className="row align-items-center">
               <div className="col-12 col-md-9 col-lg-7">
                 <motion.div
                   initial={{ opacity: 0, y: 18 }}
@@ -339,7 +337,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="col-4">
-            <Link to="/customer-dashboard" className="text-decoration-none d-flex flex-column align-items-center justify-content-center p-2 rounded-4 h-100 text-center" style={{ backgroundColor: '#FFF2ED', border: '1px solid #FCDDCE', minHeight: '110px' }}>
+            <Link to="/Profile" className="text-decoration-none d-flex flex-column align-items-center justify-content-center p-2 rounded-4 h-100 text-center" style={{ backgroundColor: '#FFF2ED', border: '1px solid #FCDDCE', minHeight: '110px' }}>
               <div className="mb-2">
                 <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
                   <path d="M24 6L8 12V24C8 33 15 41 24 43C33 41 40 33 40 24V12L24 6Z" fill="#FFFFFF" stroke="#D84B24" strokeWidth="2" strokeLinejoin="round" />
@@ -356,7 +354,7 @@ export default function HomePage() {
       </div>
 
       {/* Desktop Quick Actions */}
-      <div className="d-none d-md-block py-4 bg-white border-bottom shadow-xs">
+      <div className="d-none d-md-block py-4 bg-white shadow-xs">
         <div className="container-xl">
           <div className="row g-3">
             <div className="col-12 col-sm-6 col-lg-3">
@@ -365,7 +363,7 @@ export default function HomePage() {
                   <div className="p-2 bg-white rounded-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '46px', height: '46px' }}>
                     <FaCapsules size={24} color="#0E7348" />
                   </div>
-                  <div>
+           <div>
                     <h6 className="fw-bold mb-1 text-dark" style={{ fontSize: '15px' }}>Get 20%* off on Medicines</h6>
                     <span className="fw-bold text-uppercase text-success d-flex align-items-center gap-1" style={{ fontSize: '11px' }}>ORDER NOW <FaArrowRight size={9} /></span>
                   </div>
@@ -399,7 +397,7 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="col-12 col-sm-6 col-lg-3">
-              <Link to="/customer-dashboard" className="text-decoration-none d-flex align-items-center justify-content-between p-3 rounded-4 shadow-sm h-100" style={{ backgroundColor: '#FEF7E6', border: '1px solid #FBE8BE', minHeight: '84px' }}>
+              <Link to="/Profile" className="text-decoration-none d-flex align-items-center justify-content-between p-3 rounded-4 shadow-sm h-100" style={{ backgroundColor: '#FEF7E6', border: '1px solid #FBE8BE', minHeight: '84px' }}>
                 <div className="d-flex align-items-center gap-3">
                   <div className="p-2 bg-white rounded-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '46px', height: '46px' }}>
                     <FaShieldAlt size={24} color="#925C0C" />
@@ -415,11 +413,23 @@ export default function HomePage() {
         </div>
       </div>
 
-      <CategorySlider />
 
-      <section className="py-4 bg-white border-top border-bottom">
+<div className='d-block d-md-none'>
+<ShopByCategory/>
+</div>
+
+
+      <section className="py-4 bg-white border-bottom">
         <div className="container-xl">
           <ProductSlider title="Minimum 50 Percent Off" products={fiftyPercentProducts} viewAllLink="/products?discount=50" />
+        </div>
+      </section>
+
+
+            <section className="py-4 bg-white border-bottom">
+        <div className="container-xl">
+          <VitaminsSupplements
+          />
         </div>
       </section>
 
@@ -437,7 +447,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-5 bg-white border-top border-bottom">
+      <section className="py-5 bg-white border-bottom">
         <div className="container-xl">
           <div className="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-2">
             <div>

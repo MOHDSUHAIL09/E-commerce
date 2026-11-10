@@ -243,7 +243,7 @@ export default function LabTestsPage() {
               </div>
             </div>
             <div className="d-flex gap-2">
-              <Link to="/customer-dashboard" className="btn btn-sm btn-success">
+              <Link to="/Profile" className="btn btn-sm btn-success">
                 View in Dashboard
               </Link>
               <button onClick={() => setBookingSuccess(null)} className="btn btn-sm btn-outline-secondary">

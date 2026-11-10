@@ -549,14 +549,16 @@ let healthcareState = {
       return [];
     }
   })(),
-  compareItems: (() => {
-    try {
-      const saved = localStorage.getItem('auramed_compare');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  })()
+  // compareItems: (() => {
+  //   try {
+  //     const saved = localStorage.getItem('auramed_compare');
+  //     return saved ? JSON.parse(saved) : [];
+  //   } catch {
+  //     return [];
+  //   }
+  // })
+  
+  // ()
 };
 
 const listeners = new Set();
@@ -573,7 +575,7 @@ const updateHealthcareState = (updater) => {
     localStorage.setItem('auramed_orders', JSON.stringify(healthcareState.orders));
     localStorage.setItem('auramed_doctor_appointments', JSON.stringify(healthcareState.doctorAppointments));
     localStorage.setItem('auramed_lab_bookings', JSON.stringify(healthcareState.labBookings));
-    localStorage.setItem('auramed_compare', JSON.stringify(healthcareState.compareItems));
+    // localStorage.setItem('auramed_compare', JSON.stringify(healthcareState.compareItems));
   } catch (e) {
     console.error('Failed to sync healthcare storage', e);
   }
@@ -673,34 +675,34 @@ export const healthcareActions = {
     }));
   },
 
-  toggleCompare: (productId) => {
-    if (healthcareState.compareItems.includes(productId)) {
-      updateHealthcareState(prev => ({
-        ...prev,
-        compareItems: prev.compareItems.filter(id => id !== productId)
-      }));
-    } else {
-      if (healthcareState.compareItems.length >= 4) {
-        alert('You can compare a maximum of 4 products at a time.');
-        return;
-      }
-      updateHealthcareState(prev => ({
-        ...prev,
-        compareItems: [...prev.compareItems, productId]
-      }));
-    }
-  },
+  // toggleCompare: (productId) => {
+  //   if (healthcareState.compareItems.includes(productId)) {
+  //     updateHealthcareState(prev => ({
+  //       ...prev,
+  //       compareItems: prev.compareItems.filter(id => id !== productId)
+  //     }));
+  //   } else {
+  //     if (healthcareState.compareItems.length >= 4) {
+  //       alert('You can compare a maximum of 4 products at a time.');
+  //       return;
+  //     }
+  //     updateHealthcareState(prev => ({
+  //       ...prev,
+  //       compareItems: [...prev.compareItems, productId]
+  //     }));
+  //   }
+  // },
 
-  removeFromCompare: (productId) => {
-    updateHealthcareState(prev => ({
-      ...prev,
-      compareItems: prev.compareItems.filter(id => id !== productId)
-    }));
-  },
+  // removeFromCompare: (productId) => {
+  //   updateHealthcareState(prev => ({
+  //     ...prev,
+  //     compareItems: prev.compareItems.filter(id => id !== productId)
+  //   }));
+  // },
 
-  clearCompare: () => {
-    updateHealthcareState({ compareItems: [] });
-  },
+  // clearCompare: () => {
+  //   updateHealthcareState({ compareItems: [] });
+  // },
 
   addProduct: (prod) => {
     const newProd = {
