@@ -114,10 +114,7 @@ export default function CheckoutPage() {
 
             <div className="d-flex flex-wrap justify-content-center gap-3">
               <Link to="/Profile" className="btn btn-auramed px-4 py-2">
-                Track in Customer Dashboard
-              </Link>
-              <Link to="/" className="btn btn-outline-secondary px-4 py-2">
-                Back to Homepage
+                Track Now
               </Link>
             </div>
           </div>

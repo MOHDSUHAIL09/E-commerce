@@ -229,7 +229,7 @@ export default function ProductDetailsPage() {
                   onClick={handleBuyNow}
                   className="btn btn-warning fw-bold py-2 px-4 text-dark d-flex align-items-center gap-2"
                 >
-                  <FaBolt /> Buy Now
+                  Buy Now
                 </button>
               </div>
 

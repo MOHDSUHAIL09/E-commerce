@@ -16,10 +16,14 @@ import { LAB_TESTS } from '../LabTests/LabTestsPage';
 
 // ✅ YAHAN 3 ALAG IMAGES IMPORT KI HAIN
 import HeroImage1 from '../../assets/images/cureonhero-img1.png';
-import HeroImage2 from '../../assets/images/cureonhero-img2.png'; // Slide 2 ki image ka naam yahan daalo
-import HeroImage3 from '../../assets/images/cureonhero-img3.png'; // Slide 3 ki image ka naam yahan daalo
+import HeroImage1mobile1 from '../../assets/images/cureonhero-mobile-1.png'
+import HeroImage2 from '../../assets/images/cureonhero-img2.png';
+import HeroImage1mobile2 from '../../assets/images/cureonhero-mobile-2.png'
+import HeroImage3 from '../../assets/images/cureonhero-img3.png';
+import HeroImage1mobile3 from '../../assets/images/cureonhero-mobile-3.png'
 import VitaminsSupplements from '@/src/components/home/VitaminsSupplements';
 import ShopByCategory from '@/src/components/home/ShopByCategory';
+
 
 // ==========================================
 // 1. HERO SLIDER COMPONENT
@@ -30,10 +34,9 @@ const SLIDES = [
     badge: '100% GENUINE MEDICINES',
     heading: (
       <>
-
-       Your Health, Our Passion. Your Care,<br />
+        Your Health, Our Passion. Your Care,<br />
         <span style={{ color: '#159B64', position: 'relative' }}>
-    Our Promise.
+          Our Promise.
           <svg width="120" height="12" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', bottom: '-5px', left: 0 }}>
             <path d="M2 9.5C30 3.5 70 1.5 118 6.5" stroke="#159B64" strokeWidth="3.5" strokeLinecap="round" />
           </svg>
@@ -45,7 +48,8 @@ const SLIDES = [
     buttonLink: '/products',
     buttonColor: '#159B64',
     bgGradient: 'linear-gradient(90deg, rgba(234, 248, 242, 0.95) 0%, rgba(234, 248, 242, 0.80) 50%, rgba(234, 248, 242, 0) 80%)',
-    bgImage: HeroImage1, // ✅ Slide 1 Image
+    bgImage: HeroImage1,
+    mobileImage: HeroImage1mobile1, // ✅ Mobile Image Added
     dotColor: '#159B64'
   },
   {
@@ -57,7 +61,8 @@ const SLIDES = [
     buttonLink: '/doctors',
     buttonColor: '#08784B',
     bgGradient: 'linear-gradient(90deg, rgba(234, 248, 242, 0.95) 0%, rgba(234, 248, 242, 0.80) 50%, rgba(234, 248, 242, 0) 80%)',
-    bgImage: HeroImage2, // ✅ Slide 2 Image
+    bgImage: HeroImage2,
+    mobileImage: HeroImage1mobile2, // ✅ Mobile Image Added
     dotColor: '#08784B'
   },
   {
@@ -69,7 +74,8 @@ const SLIDES = [
     buttonLink: '/lab-tests',
     buttonColor: '#159B64',
     bgGradient: 'linear-gradient(90deg, rgba(234, 248, 242, 0.95) 0%, rgba(234, 248, 242, 0.80) 50%, rgba(234, 248, 242, 0) 80%)',
-    bgImage: HeroImage3, // ✅ Slide 3 Image
+    bgImage: HeroImage3,
+    mobileImage: HeroImage1mobile3, // ✅ Mobile Image Added
     dotColor: '#159B64'
   }
 ];
@@ -86,7 +92,7 @@ function HeroSlider({ slides = SLIDES }) {
     if (isPaused) return;
     const interval = setInterval(() => {
       setCurrentSlide(prev => (prev + 1) % activeSlides.length);
-    }, 5500);
+    }, 4000);
     return () => clearInterval(interval);
   }, [isPaused, activeSlides.length]);
 
@@ -107,7 +113,7 @@ function HeroSlider({ slides = SLIDES }) {
 
   return (
     <div
-      className="position-relative overflow-hidden w-100"
+      className="position-relative overflow-hidden w-100 bg-light"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
@@ -120,109 +126,135 @@ function HeroSlider({ slides = SLIDES }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
-          className="w-100 d-flex align-items-center position-relative"
-          style={{
-            height: '80vh',
-            backgroundImage: `${slide.bgGradient}, url(${slide.bgImage})`,
-            backgroundPosition: 'right center',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat'
-          }}
+          transition={{ duration: 0.5 }}
+          className="w-100 position-relative"
         >
-          <div className="container-xl position-relative z-1">
-            <div className="row align-items-center">
-              <div className="col-12 col-md-9 col-lg-7">
-                <motion.div
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.45, delay: 0.1 }}
-                >
-                  {/* Badge */}
-                  <div
-                    className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3 shadow-sm"
-                    style={{
-                      backgroundColor: '#D6F2E3',
-                      color: '#005F40',
-                      fontSize: '11px',
-                      fontWeight: '700',
-                      letterSpacing: '0.6px'
-                    }}
+          {/* ========================================================
+              MOBILE VIEW (Sirf Image, No Text) - Shows below 768px
+          ======================================================== */}
+          <div className="d-block d-md-none w-100 px-2 py-2 bg-white">
+            <Link to={slide.buttonLink} className="d-block rounded-3 overflow-hidden shadow-sm">
+              <img 
+                src={slide.mobileImage} 
+                alt={slide.badge} 
+                className="w-100 d-block"
+                style={{ 
+                  height: 'auto', 
+                  objectFit: 'contain',
+                  display: 'block'
+                }} 
+              />
+            </Link>
+          </div>
+          {/* ========================================================
+              DESKTOP VIEW (With Text & Gradient) - Shows above 768px
+          ======================================================== */}
+          <div 
+            className="d-none d-md-flex align-items-center w-100"
+            style={{
+              height: '80vh',
+              backgroundImage: `${slide.bgGradient}, url(${slide.bgImage})`,
+              backgroundPosition: 'right center',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="container-xl position-relative z-1">
+              <div className="row align-items-center">
+                <div className="col-12 col-md-9 col-lg-7">
+                  <motion.div
+                    initial={{ opacity: 0, y: 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, delay: 0.1 }}
                   >
-                    <FaCheckCircle size={12} />
-                    {slide.badge}
-                  </div>
-
-                  {/* Heading */}
-                  <h1
-                    className="fw-bold mb-3"
-                    style={{
-                      fontSize: 'clamp(32px, 5vw, 56px)',
-                      lineHeight: 1.15,
-                      letterSpacing: '-1px',
-                      color: '#172B24'
-                    }}
-                  >
-                    {slide.heading}
-                  </h1>
-
-                  {/* Description */}
-                  <p
-                    className="mb-4"
-                    style={{
-                      fontSize: '15px',
-                      lineHeight: 1.6,
-                      color: '#4A5568',
-                      maxWidth: '90%'
-                    }}
-                  >
-                    {slide.description}
-                  </p>
-
-                  {/* Buttons Row */}
-                  <div className="d-flex flex-wrap align-items-center gap-3 mb-4 mb-md-5">
-                    <Link
-                      to={slide.buttonLink}
-                      className="btn text-white fw-bold d-inline-flex align-items-center gap-2 shadow-sm text-decoration-none"
+                    {/* Badge */}
+                    <div
+                      className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3 shadow-sm"
                       style={{
-                        backgroundColor: slide.buttonColor,
-                        borderRadius: '30px',
-                        fontSize: '15px',
-                        padding: '12px 28px',
-                        border: 'none'
+                        backgroundColor: '#D6F2E3',
+                        color: '#005F40',
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        letterSpacing: '0.6px'
                       }}
                     >
-                      <span>{slide.buttonText}</span>
-                      <FaArrowRight size={14} />
-                    </Link>
-                  </div>
-                </motion.div>
+                      <FaCheckCircle size={12} />
+                      {slide.badge}
+                    </div>
+
+                    {/* Heading */}
+                    <h1
+                      className="fw-bold mb-3"
+                      style={{
+                        fontSize: 'clamp(32px, 5vw, 56px)',
+                        lineHeight: 1.15,
+                        letterSpacing: '-1px',
+                        color: '#172B24'
+                      }}
+                    >
+                      {slide.heading}
+                    </h1>
+
+                    {/* Description */}
+                    <p
+                      className="mb-4"
+                      style={{
+                        fontSize: '15px',
+                        lineHeight: 1.6,
+                        color: '#4A5568',
+                        maxWidth: '90%'
+                      }}
+                    >
+                      {slide.description}
+                    </p>
+
+                    {/* Buttons Row */}
+                    <div className="d-flex flex-wrap align-items-center gap-3 mb-4 mb-md-5">
+                      <Link
+                        to={slide.buttonLink}
+                        className="btn text-white fw-bold d-inline-flex align-items-center gap-2 shadow-sm text-decoration-none"
+                        style={{
+                          backgroundColor: slide.buttonColor,
+                          borderRadius: '30px',
+                          fontSize: '15px',
+                          padding: '12px 28px',
+                          border: 'none'
+                        }}
+                      >
+                        <span>{slide.buttonText}</span>
+                        <FaArrowRight size={14} />
+                      </Link>
+                    </div>
+                  </motion.div>
+                </div>
               </div>
             </div>
           </div>
         </motion.div>
       </AnimatePresence>
 
-      {/* Pagination Dots */}
-      <div className="position-absolute bottom-0 start-50 translate-middle-x mb-4 d-flex align-items-center gap-2 z-2 d-lg-none">
+      {/* Mobile Pagination Dots */}
+      <div className="position-absolute bottom-0 start-50 translate-middle-x mb-2 d-flex align-items-center gap-2 z-2 d-md-none">
         {activeSlides.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentSlide(idx)}
             className="border-0 rounded-circle p-0"
             style={{
-              width: currentSlide === idx ? '10px' : '8px',
-              height: currentSlide === idx ? '10px' : '8px',
-              backgroundColor: currentSlide === idx ? (slide.dotColor || '#3B82F6') : '#FFFFFF',
+              width: currentSlide === idx ? '16px' : '6px',
+              height: '6px',
+              borderRadius: '10px',
+              backgroundColor: currentSlide === idx ? '#159B64' : '#FFFFFF',
               boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
               cursor: 'pointer',
-              opacity: currentSlide === idx ? 1 : 0.7
+              opacity: currentSlide === idx ? 1 : 0.7,
+              transition: 'all 0.3s ease'
             }}
           />
         ))}
       </div>
 
-      {/* Navigation Arrows */}
+      {/* Desktop Arrows */}
       <div className="position-absolute bottom-0 end-0 m-4 d-none d-md-flex gap-2 z-2">
         <button onClick={prevSlide} className="btn btn-sm bg-white border rounded-circle shadow-sm p-2" style={{ width: '36px', height: '36px' }}>
           <FaChevronLeft size={14} color="#172B24" />
@@ -253,7 +285,7 @@ export default function HomePage() {
       <HeroSlider />
 
       {/* Mobile Quick Actions */}
-      <div className="d-block d-md-none px-3 pt-3 pb-2 bg-white">
+      <div className="d-block d-md-none px-2 pt-3 pb-2 bg-white">
         <div className="row g-2 mb-2">
           <div className="col-6">
             <Link
@@ -354,11 +386,11 @@ export default function HomePage() {
       </div>
 
       {/* Desktop Quick Actions */}
-      <div className="d-none d-md-block py-4 bg-white shadow-xs">
+      <div className="d-none d-md-block py-3 bg-white shadow-xs">
         <div className="container-xl">
           <div className="row g-3">
             <div className="col-12 col-sm-6 col-lg-3">
-              <Link to="/products" className="text-decoration-none d-flex align-items-center justify-content-between p-3 rounded-4 shadow-sm h-100" style={{ backgroundColor: '#E8F7F0', border: '1px solid #D6F2E3', minHeight: '84px' }}>
+              <Link to="/products" className="text-decoration-none d-flex align-items-center justify-content-between p-2 rounded-4 shadow-sm h-100" style={{ backgroundColor: '#E8F7F0', border: '1px solid #D6F2E3', minHeight: '84px' }}>
                 <div className="d-flex align-items-center gap-3">
                   <div className="p-2 bg-white rounded-3 d-flex align-items-center justify-content-center shadow-sm" style={{ width: '46px', height: '46px' }}>
                     <FaCapsules size={24} color="#0E7348" />
@@ -413,11 +445,9 @@ export default function HomePage() {
         </div>
       </div>
 
-
-<div className='d-block d-md-none'>
-<ShopByCategory/>
-</div>
-
+      <div className='d-block d-md-none'>
+        <ShopByCategory />
+      </div>
 
       <section className="py-4 bg-white border-bottom">
         <div className="container-xl">
@@ -425,11 +455,9 @@ export default function HomePage() {
         </div>
       </section>
 
-
-            <section className="py-4 bg-white border-bottom">
+      <section className="py-4 bg-white border-bottom">
         <div className="container-xl">
-          <VitaminsSupplements
-          />
+          <VitaminsSupplements />
         </div>
       </section>
 
@@ -444,39 +472,6 @@ export default function HomePage() {
       <section className="py-4 bg-white border-bottom">
         <div className="container-xl">
           <ProductSlider title="Best Selling Healthcare Products" subtitle="CUSTOMER FAVORITES" products={bestSellers} viewAllLink="/products" />
-        </div>
-      </section>
-
-      <section className="py-5 bg-white border-bottom">
-        <div className="container-xl">
-          <div className="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-2">
-            <div>
-              <span className="text-primary-green fw-bold text-uppercase" style={{ fontSize: '12px', letterSpacing: '1px' }}>CERTIFIED PATHOLOGY</span>
-              <h3 className="fw-bold mb-0 text-dark">Book Diagnostics & Health Checkups</h3>
-            </div>
-            <Link to="/lab-tests" className="btn btn-sm btn-auramed">View All Tests <FaArrowRight size={11} /></Link>
-          </div>
-          <div className="row g-3">
-            {LAB_TESTS.slice(0, 3).map(test => (
-              <div key={test.id} className="col-md-4">
-                <div className="card-auramed p-4 h-100 d-flex flex-column">
-                  <div className="d-flex justify-content-between align-items-start mb-2">
-                    <span className="badge bg-light text-primary-green border border-success fw-bold" style={{ fontSize: '11px' }}>{test.parameters} Parameters Included</span>
-                    <span className="badge bg-danger text-white">{test.discount}% OFF</span>
-                  </div>
-                  <h5 className="fw-bold text-dark mb-2" style={{ fontSize: '16px' }}>{test.title}</h5>
-                  <p className="text-secondary flex-grow-1" style={{ fontSize: '12px' }}>{test.description}</p>
-                  <div className="d-flex align-items-center justify-content-between pt-2 border-top mt-auto">
-                    <div>
-                      <span className="fs-5 fw-bold text-dark">₹{(test.price * 25).toFixed(0)}</span>
-                      <span className="text-secondary text-decoration-line-through ms-2" style={{ fontSize: '12px' }}>₹{(test.mrp * 25).toFixed(0)}</span>
-                    </div>
-                    <Link to="/lab-tests" className="btn btn-sm btn-auramed">Book Test</Link>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 

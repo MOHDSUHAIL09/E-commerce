@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fa';
 import { useHealthcare } from '../../context/HealthcareContext';
 import { CATEGORIES } from '../Categories/CategoriesPage';
+import cureonlogo from '../../assets/images/cureon-logo.png'
 
 // ✅ Donut Chart Component
 const DonutChart = ({ percentage, color, label }) => {
@@ -198,7 +199,7 @@ export default function AdminDashboard() {
         } ${isSidebarCollapsed ? 'desktop-collapsed' : 'desktop-expanded'}`}
       >
         <div className="border-bottom d-flex align-items-center px-4" style={{ height: '70px', flexShrink: 0, padding: isSidebarCollapsed ? '0 10px' : '0 20px' }}>
-          <img src="/assets/cureon_logo_trimmed.png" alt="CureOn Logo" style={{ maxHeight: isSidebarCollapsed ? '35px' : '45px', maxWidth: '100%', objectFit: 'contain', transition: 'all 0.3s ease', cursor: 'pointer' }} onClick={() => navigate('/')} />
+          <img src={cureonlogo} alt="CureOn Logo" style={{ maxHeight: isSidebarCollapsed ? '35px' : '45px', maxWidth: '100%', objectFit: 'contain', transition: 'all 0.3s ease', cursor: 'pointer' }} onClick={() => navigate('/')} />
         </div>
 
         <div className="flex-grow-1 overflow-auto py-3 px-2">

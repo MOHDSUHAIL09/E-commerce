@@ -5,6 +5,7 @@ import {
   FaMapMarkerAlt, FaApple, FaGooglePlay, FaCheck, FaLock,
   FaFileContract, FaAward
 } from 'react-icons/fa';
+import cureonlogo from '../../assets/images/cureon-logo.png'
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -74,7 +75,7 @@ export default function Footer() {
           <div className="col-lg-3 col-md-6">
             <div className="d-flex align-items-center gap-2 mb-3">
               <img 
-                src="/assets/cureon_logo_trimmed.png" 
+                src={cureonlogo}
                 alt="CUREON" 
                 style={{ height: '42px', width: 'auto', objectFit: 'contain', background: '#FFFFFF', borderRadius: '6px', padding: '3px 8px' }} 
               />

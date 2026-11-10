@@ -15,6 +15,7 @@ import DeliveryLocationDrawer from './DeliveryLocationDrawer';
 import LoginDrawer from './LoginDrawer';
 import WishlistDrawer from './WishlistDrawer';
 import ProfileDrawer from './ProfileDrawer';
+import cureonlogo from '../../assets/images/cureon-logo.png'
 
 export default function Header({ onOpenSidebar, onOpenRoleModal }) {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ export default function Header({ onOpenSidebar, onOpenRoleModal }) {
           <div className="d-flex align-items-center gap-2 overflow-hidden" style={{ flex: 1 }}>
             <Link to="/" className="text-decoration-none flex-shrink-0">
               <img 
-                src="/assets/cureon_logo_trimmed.png" 
+                src={cureonlogo} 
                 alt="CUREON" 
                 style={{ 
                   height: '28px', 
@@ -225,7 +226,7 @@ export default function Header({ onOpenSidebar, onOpenRoleModal }) {
 
               <Link to="/" className="d-flex align-items-center text-decoration-none">
                 <img 
-                  src="/assets/cureon_logo_trimmed.png" 
+                  src={cureonlogo}
                   alt="CUREON" 
                   style={{ height: '48px', width: 'auto', objectFit: 'contain' }} 
                 />

@@ -14,6 +14,7 @@ import { useWishlist } from '../../context/WishlistContext';
 import { CATEGORIES } from '../../pages/Categories/CategoriesPage';
 import LoginDrawer from '../common/LoginDrawer';
 import WishlistDrawer from '../common/WishlistDrawer';
+import cureonlogo from '../../assets/images/cureon-logo.png'
 
 export default function AnimatedSidebar({ isOpen, onClose, onOpenRoleModal }) {
   const location = useLocation();
@@ -114,7 +115,7 @@ export default function AnimatedSidebar({ isOpen, onClose, onOpenRoleModal }) {
             <div className="p-3 border-bottom d-flex align-items-center justify-content-between" style={{ backgroundColor: '#F8FAF9' }}>
               <div className="d-flex align-items-center gap-2">
                 <img 
-                  src="/assets/cureon_logo_trimmed.png" 
+                  src={cureonlogo} 
                   alt="CUREON" 
                   style={{ height: '38px', width: 'auto', objectFit: 'contain' }} 
                 />

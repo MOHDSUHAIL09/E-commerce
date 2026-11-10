@@ -332,9 +332,9 @@ export default function PopularBrandsSection() {
             }}
           >
             {brands.map((brand) => (
-              <Link
+              <div
                 key={brand.id}
-                to={`/products?search=${encodeURIComponent(brand.name)}`}
+                // to={`/products?search=${encodeURIComponent(brand.name)}`}
                 onMouseEnter={() => setHoveredBrand(brand.id)}
                 onMouseLeave={() => setHoveredBrand(null)}
                 style={{
@@ -451,7 +451,7 @@ export default function PopularBrandsSection() {
                 >
                   {brand.name}
                 </h3>
-              </Link>
+              </div>
             ))}
           </div>
         </div>

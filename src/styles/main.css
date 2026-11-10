@@ -315,7 +315,7 @@ a:hover {
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
-  z-index: 1020;
+  z-index: 1025;
 }
 
 .search-input-group {
