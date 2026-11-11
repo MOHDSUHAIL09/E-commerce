@@ -7,6 +7,7 @@ import {
   FaTooth, FaProcedures, FaDumbbell, FaPrescriptionBottleAlt,
   FaSearch, FaArrowRight
 } from 'react-icons/fa';
+
 export const CATEGORIES = [
   { id: 'cat-1', name: 'Prescription Medicines', slug: 'prescription-medicines', icon: 'FaPrescriptionBottleAlt', description: 'Doctor prescribed ethical medicines & generics' },
   { id: 'cat-2', name: 'OTC Medicines', slug: 'otc-medicines', icon: 'FaPills', description: 'Everyday over-the-counter remedies & fever care' },
@@ -60,29 +61,26 @@ export default function CategoriesPage() {
   );
 
   return (
-    <div className="py-5">
+    <div className="py-5" style={{ backgroundColor: '#FAFAFA', minHeight: '100vh' }}>
       <div className="container-xl">
         
         {/* Header */}
         <div className="text-center mb-5">
-          <span className="badge bg-light-green text-dark-green fw-semibold px-3 py-1 mb-2">
+          <span className="badge bg-light-green text-dark-green fw-semibold px-3 py-1 mb-3">
             ALL 19 HEALTHCARE VERTICALS
           </span>
-          <h2 className="display-6 fw-bold text-dark">Explore All Healthcare Categories</h2>
-          <p className="text-secondary mx-auto" style={{ maxWidth: '600px', fontSize: '15px' }}>
-            From doctor-prescribed medications to everyday wellness vitamins, diagnostics, and personal hygiene essentials.
-          </p>
-
+          <h2 className="display-6 fw-bold text-dark mb-2">Explore All Categories</h2>
+          
           {/* Category Search */}
           <div className="mx-auto mt-4" style={{ maxWidth: '440px' }}>
-            <div className="input-group">
-              <span className="input-group-text bg-white border-end-0">
+            <div className="input-group shadow-sm rounded-pill overflow-hidden border">
+              <span className="input-group-text bg-white border-0 ps-4">
                 <FaSearch color="#64756D" />
               </span>
               <input
                 type="text"
-                className="form-control border-start-0"
-                placeholder="Search healthcare categories..."
+                className="form-control border-0 ps-2 shadow-none"
+                placeholder="Search categories..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -90,34 +88,33 @@ export default function CategoriesPage() {
           </div>
         </div>
 
-        {/* Categories Grid */}
-        <div className="row g-4">
+        {/* Categories Grid (Fixed Mobile 2 cards per row) */}
+        <div className="row g-3">
           {filteredCategories.map((cat) => (
-            <div key={cat.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
-              <Link to={`/categories/${cat.slug}`} className="category-card text-decoration-none">
-                <div className="category-icon-box">
-                  {ICON_MAP[cat.icon] || <FaCapsules />}
-                </div>
-                <h5 className="fw-bold text-dark mb-1" style={{ fontSize: '16px' }}>{cat.name}</h5>
-                <p className="text-secondary mb-3 line-clamp-2" style={{ fontSize: '12px', minHeight: '36px' }}>
-                  {cat.description}
-                </p>
-                <div className="d-flex align-items-center justify-content-between pt-2 border-top text-secondary" style={{ fontSize: '12px' }}>
-                  {/* <span className="fw-semibold text-primary-green">{cat.count}+ Products</span> */}
-                  <span className="d-flex align-items-center gap-1 text-dark">
-                    Explore <FaArrowRight size={10} />
-                  </span>
+            <div key={cat.id} className="col-6 col-sm-4 col-md-3 col-lg-3">
+              <Link to={`/categories/${cat.slug}`} className="text-decoration-none">
+                <div className="bg-white border rounded-4 p-3 p-md-4 h-100 shadow-sm transition-all text-center text-md-start hover-shadow" style={{ transition: 'all 0.3s' }}>
+                  <div 
+                    className="rounded-circle bg-light-green text-success d-flex align-items-center justify-content-center mb-2 mb-md-3 mx-auto mx-md-0"
+                    style={{ width: '45px', height: '45px', fontSize: '18px' }}
+                  >
+                    {ICON_MAP[cat.icon] || <FaCapsules />}
+                  </div>
+                  <h6 className="fw-bold text-dark mb-1" style={{ fontSize: '13px' }}>{cat.name}</h6>
+                  <p className="text-secondary mb-2 d-none d-md-block line-clamp-2" style={{ fontSize: '11px', minHeight: '30px' }}>
+                    {cat.description}
+                  </p>
+                  
+                  <div className="d-none d-md-flex align-items-center justify-content-between pt-2 border-top text-secondary" style={{ fontSize: '11px' }}>
+                    <span className="d-flex align-items-center gap-1 fw-bold text-success">
+                      Explore <FaArrowRight size={10} />
+                    </span>
+                  </div>
                 </div>
               </Link>
             </div>
           ))}
         </div>
-
-        {filteredCategories.length === 0 && (
-          <div className="text-center py-5">
-            <p className="text-secondary">No categories matched "{searchTerm}".</p>
-          </div>
-        )}
 
       </div>
     </div>

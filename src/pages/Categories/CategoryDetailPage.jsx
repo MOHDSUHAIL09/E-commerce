@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { FaArrowLeft, FaFilter, FaPills } from 'react-icons/fa';
+import { FaArrowLeft, FaSearch, FaSortDown, FaPlus, FaMinus } from 'react-icons/fa';
 import ProductCard from '../../components/products/ProductCard';
 import QuickViewModal from '../../components/common/QuickViewModal';
 import { useHealthcare } from '../../context/HealthcareContext';
@@ -11,6 +11,10 @@ export default function CategoryDetailPage() {
   const { productsList } = useHealthcare();
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const [sortBy, setSortBy] = useState('popularity');
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Accordion state (Konsi category open hai)
+  const [openCategory, setOpenCategory] = useState(slug || ''); 
 
   const category = CATEGORIES.find(c => c.slug === slug) || {
     name: slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
@@ -25,9 +29,13 @@ export default function CategoryDetailPage() {
     p.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug
   );
 
-  // If mock data has fewer products in this category, show matching or provide related so user never sees an empty screen
   if (categoryProducts.length === 0) {
-    categoryProducts = productsList.slice(0, 4);
+    categoryProducts = productsList.slice(0, 8);
+  }
+
+  if (searchQuery.trim()) {
+    const q = searchQuery.toLowerCase();
+    categoryProducts = categoryProducts.filter(p => p.name.toLowerCase().includes(q));
   }
 
   const sortedProducts = [...categoryProducts].sort((a, b) => {
@@ -37,76 +45,110 @@ export default function CategoryDetailPage() {
     return b.reviewsCount - a.reviewsCount;
   });
 
+  // Toggle Accordion
+  const toggleCategory = (catSlug) => {
+    if (openCategory === catSlug) setOpenCategory('');
+    else setOpenCategory(catSlug);
+  };
+
   return (
-    <div className="py-4">
+    <div className="py-4" style={{ backgroundColor: '#FAFAFA' }}>
       <div className="container-xl">
         
         {/* Breadcrumb */}
-        <nav aria-label="breadcrumb" className="mb-3">
-          <ol className="breadcrumb" style={{ fontSize: '13px' }}>
-            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-            <li className="breadcrumb-item"><Link to="/categories">Categories</Link></li>
-            <li className="breadcrumb-item active" aria-current="page">{category.name}</li>
+        <nav aria-label="breadcrumb" className="mb-3 d-none d-md-block">
+          <ol className="breadcrumb" style={{ fontSize: '12px' }}>
+            <li className="breadcrumb-item"><Link to="/" className="text-secondary text-decoration-none">Home</Link></li>
+            <li className="breadcrumb-item"><Link to="/categories" className="text-secondary text-decoration-none">Categories</Link></li>
+            <li className="breadcrumb-item active text-dark fw-bold" aria-current="page">{category.name}</li>
           </ol>
         </nav>
 
-        {/* Category Hero Banner */}
-        <div 
-          className="p-4 p-md-5 rounded-4 mb-4 text-white position-relative overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #08784B 0%, #159B64 100%)' }}
-        >
-          <div className="row align-items-center">
-            <div className="col-lg-8">
-              <span className="badge bg-light text-dark fw-bold mb-2">HEALTHCARE VERTICAL</span>
-              <h2 className="display-6 fw-bold mb-2 text-white">{category.name}</h2>
-              <p className="lead text-white-50 mb-3" style={{ fontSize: '15px', maxWidth: '620px' }}>
-                {category.description}
-              </p>
-              <div className="d-flex align-items-center gap-3" style={{ fontSize: '13px' }}>
-                <span>Certified Dispensary</span>
-                <span>•</span>
-                <span>{category.count}+ Available Formulations</span>
-                <span>•</span>
-                <span>Express 15-Min Delivery</span>
+        <div className="row g-4">
+          
+          {/* LEFT SIDEBAR: Categories & Filters (Mobile par top par aayega) */}
+          <div className="col-12 col-lg-3">
+            <div className="bg-white border rounded-3 shadow-sm sticky-top" style={{ top: '90px', zIndex: 10 }}>
+              
+              {/* Product Categories */}
+              <div className="p-3 border-bottom">
+                <h6 className="fw-bold text-dark mb-3">Categories</h6>
+                <div className="d-flex flex-column gap-2">
+                  {CATEGORIES.map(c => {
+                    const isOpen = openCategory === c.slug;
+                    return (
+                      <div key={c.id} className="d-flex flex-column border-bottom pb-2">
+                        <div 
+                          onClick={() => toggleCategory(c.slug)}
+                          className="d-flex justify-content-between align-items-center text-secondary" 
+                          style={{ fontSize: '13px', cursor: 'pointer' }}
+                        >
+                          <Link to={`/categories/${c.slug}`} className={`text-decoration-none ${slug === c.slug ? 'text-success fw-bold' : 'text-secondary'}`}>
+                            {c.name}
+                          </Link>
+                          {isOpen ? <FaMinus size={10} className="text-muted" /> : <FaPlus size={10} className="text-muted" />}
+                        </div>
+                        
+                        {/* Sub-categories (Shows when clicked) */}
+                        {isOpen && (
+                          <div className="ps-3 mt-2 d-flex flex-column gap-1" style={{ fontSize: '12px' }}>
+                            <Link to={`/categories/${c.slug}?filter=all`} className="text-secondary text-decoration-none hover-text-success">All {c.name}</Link>
+                            <Link to={`/categories/${c.slug}?filter=top`} className="text-secondary text-decoration-none hover-text-success">Top Rated</Link>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Header Controls */}
-        <div className="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
-          <div>
-            <h4 className="fw-bold text-dark mb-0">{category.name} Catalog</h4>
-            <span className="text-secondary" style={{ fontSize: '13px' }}>
-              Showing {sortedProducts.length} verified products
-            </span>
-          </div>
+          {/* RIGHT SIDE: Products Grid */}
+          <div className="col-12 col-lg-9">
+            
+            {/* Top Header */}
+            <div className="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3 bg-white p-3 rounded-3 border shadow-sm">
+              <div>
+                <h4 className="fw-bold text-dark mb-0">{category.name} <span className="text-secondary fw-normal" style={{ fontSize: '14px' }}>- Total Items ({sortedProducts.length})</span></h4>
+              </div>
 
-          <div className="d-flex align-items-center gap-2">
-            <span className="text-secondary d-none d-sm-inline" style={{ fontSize: '13px' }}>Sort by:</span>
-            <select
-              className="form-select form-select-sm"
-              style={{ width: '170px' }}
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="popularity">Most Popular</option>
-              <option value="rating">Top Rated</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-            </select>
-          </div>
-        </div>
+              <div className="d-flex align-items-center gap-2 w-100 w-md-auto">
+                <div className="input-group input-group-sm flex-grow-1" style={{ maxWidth: '200px' }}>
+                  <span className="input-group-text bg-white border-end-0"><FaSearch color="#64756D" /></span>
+                  <input type="text" className="form-control border-start-0" placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                </div>
 
-        {/* Products Grid */}
-        <div className="row g-3">
-          {sortedProducts.map(prod => (
-            <div key={prod.id} className="col-12 col-sm-6 col-md-4 col-lg-3">
-              <ProductCard product={prod} onQuickView={setQuickViewProduct} />
+                <select
+                  className="form-select form-select-sm shadow-none w-auto"
+                  style={{ cursor: 'pointer' }}
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                >
+                  <option value="popularity">Sort By : Relevance</option>
+                  <option value="rating">Sort By : Rating</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                </select>
+              </div>
             </div>
-          ))}
-        </div>
 
+            {/* Products Grid (Mobile par 2 cards ek row mein) */}
+            <div className="row g-3">
+              {sortedProducts.map(prod => (
+                <div key={prod.id} className="col-6 col-md-4 col-lg-4">
+                  <ProductCard product={prod} onQuickView={setQuickViewProduct} />
+                </div>
+              ))}
+            </div>
+            
+            {sortedProducts.length === 0 && (
+              <div className="text-center py-5 bg-white border rounded-3">
+                <h5 className="text-secondary">No products found in this category.</h5>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {quickViewProduct && (
@@ -117,4 +159,4 @@ export default function CategoryDetailPage() {
       )}
     </div>
   );
-}
+} 
