@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -6,13 +6,9 @@ import {
   FaShieldAlt, FaUserMd, FaFlask, FaCapsules, FaCheckCircle
 } from 'react-icons/fa';
 import ProductSlider from '../../components/products/ProductSlider';
-import ProductCard from '../../components/products/ProductCard';
 import QuickViewModal from '../../components/common/QuickViewModal';
 import PopularBrandsSection from '../../components/home/PopularBrandsSection';
 import { useHealthcare } from '../../context/HealthcareContext';
-import { CATEGORIES } from '../Categories/CategoriesPage';
-import { DOCTORS } from '../Doctors/DoctorsPage';
-import { LAB_TESTS } from '../LabTests/LabTestsPage';
 
 // ✅ YAHAN 3 ALAG IMAGES IMPORT KI HAIN
 import HeroImage1 from '../../assets/images/cureonhero-img1.png';
@@ -45,7 +41,7 @@ const SLIDES = [
     ),
     description: 'Genuine medicines and healthcare essentials delivered directly to your doorstep with certified temperature-controlled cold-chain safety.',
     buttonText: 'Shop Medicines',
-    buttonLink: '/products',
+    buttonLink: '/doctors',
     buttonColor: '#159B64',
     bgGradient: 'linear-gradient(90deg, rgba(234, 248, 242, 0.95) 0%, rgba(234, 248, 242, 0.80) 50%, rgba(234, 248, 242, 0) 80%)',
     bgImage: HeroImage1,
@@ -58,7 +54,7 @@ const SLIDES = [
     heading: 'Consult Top Doctors Online Anytime, Anywhere',
     description: 'Connect via encrypted video with experienced physicians, cardiologists, and pediatricians. Receive verified digital prescriptions instantly.',
     buttonText: 'Book Doctor Consultation',
-    buttonLink: '/doctors',
+    buttonLink: '/lab-tests',
     buttonColor: '#08784B',
     bgGradient: 'linear-gradient(90deg, rgba(234, 248, 242, 0.95) 0%, rgba(234, 248, 242, 0.80) 50%, rgba(234, 248, 242, 0) 80%)',
     bgImage: HeroImage2,
@@ -71,7 +67,7 @@ const SLIDES = [
     heading: 'Diagnostics & Lab Tests At Home',
     description: 'Book full-body diagnostic health checkups with 100% sterile home sample collection and verified smart digital reports delivered in 12 hours.',
     buttonText: 'Book Lab Tests',
-    buttonLink: '/lab-tests',
+    buttonLink: '/products ',
     buttonColor: '#159B64',
     bgGradient: 'linear-gradient(90deg, rgba(234, 248, 242, 0.95) 0%, rgba(234, 248, 242, 0.80) 50%, rgba(234, 248, 242, 0) 80%)',
     bgImage: HeroImage3,
