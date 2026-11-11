@@ -88,7 +88,7 @@ function HeroSlider({ slides = SLIDES }) {
     if (isPaused) return;
     const interval = setInterval(() => {
       setCurrentSlide(prev => (prev + 1) % activeSlides.length);
-    }, 4000);
+    }, 3000);
     return () => clearInterval(interval);
   }, [isPaused, activeSlides.length]);
 
