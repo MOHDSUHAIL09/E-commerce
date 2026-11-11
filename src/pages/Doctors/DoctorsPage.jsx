@@ -752,15 +752,16 @@ export default function DoctorsPage() {
           <section className="mb-4">
             <div className="d-flex align-items-center justify-content-between mb-3">
               <h3 className="fw-bold text-dark mb-0" style={{ fontSize: '20px' }}>
-                Health Articles For You <span className="text-secondary fw-normal" style={{ fontSize: '16px' }}>(30)</span>
+                Health Articles For You 
               </h3>
+              {/* <Link to="/products">
               <button 
-                onClick={() => setReadingArticle(HEALTH_ARTICLES[0])}
                 className="btn btn-link text-decoration-none fw-bold" 
                 style={{ color: '#005F40', fontSize: '14px' }}
               >
                 View All
               </button>
+              </Link> */}
             </div>
 
             <div className="row g-3">
@@ -1145,13 +1146,13 @@ export default function DoctorsPage() {
                       >
                         Done
                       </button>
-                      <Link 
+                      {/* <Link 
                         to="/Profile" 
                         className="btn btn-outline-success px-4 py-2"
                         style={{ borderRadius: '6px' }}
                       >
                         View in Dashboard
-                      </Link>
+                      </Link> */}
                     </div>
                   </div>
                 ) : (

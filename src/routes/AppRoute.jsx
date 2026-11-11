@@ -19,6 +19,8 @@ import SuperAdminDashboard from '../pages/AdminDashboard/SuperAdminDashboard';
 import DeliveryDashboard from '../pages/DeliveryDashboard/DeliveryDashboard';
 import LoginPage from '../pages/Auth/LoginPage';
 import RegisterPage from '../pages/Auth/RegisterPage';
+import Payment from '../pages/Checkout/Payment';
+import TrackOrderPage from '../pages/Profile/MyOrder';
 
 
 export default function AppRoute() {
@@ -31,6 +33,7 @@ export default function AppRoute() {
       <Route path="/categories/:slug" element={<CategoryDetailPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/payment" element={<Payment />} />
       <Route path="/prescription" element={<PrescriptionPage />} />
       <Route path="/prescriptions" element={<Navigate to="/prescription" replace />} />
       <Route path="/insurance" element={<CustomerProfile />} />
@@ -43,6 +46,7 @@ export default function AppRoute() {
       <Route path="/delivery-dashboard" element={<DeliveryDashboard />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/track-order/:id" element={<TrackOrderPage/>} />
       <Route path="*" element={<Navigate to="/" replace />} />
       
     </Routes>

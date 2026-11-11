@@ -9,7 +9,7 @@ import {
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 
-// Last minute buys items directly modeled after reference image (image_7e7c8793) in Indian Rupees
+// Last minute buys items directly modeled after reference image in Indian Rupees
 const LAST_MINUTE_BUYS = [
   {
     id: 'lmb-1',
@@ -138,25 +138,22 @@ export default function CartPage() {
   }
 
   return (
-    <div className="py-3 py-md-4" style={{ backgroundColor: '#F8FAF9', minHeight: '85vh', paddingBottom: '90px' }}>
+    <div className="py-3 py-md-4" style={{ backgroundColor: '#F8FAF9', minHeight: '85vh' }}>
       <div className="container-xl">
         
-        {/* Top Breadcrumb Title (Matches image_7e7c8793: MY CART) */}
+        {/* Top Breadcrumb Title */}
         <div className="mb-3">
           <span className="fw-bold text-uppercase" style={{ color: '#093B2B', fontSize: '15px', letterSpacing: '0.5px' }}>
             MY CART
           </span>
         </div>
 
-        {/* 1. Add Address Banner Strip (Matches image_7e7c8793) */}
+        {/* 1. Add Address Banner Strip */}
         <div 
           className="p-3 mb-4 rounded-3 d-flex align-items-center justify-content-between flex-wrap gap-2 shadow-sm"
           style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5ECE8' }}
         >
           <div className="d-flex align-items-center gap-2">
-            <span style={{ color: '#D9531E', fontSize: '18px' }}>
-              <FaPaperPlane />
-            </span>
             <span style={{ fontSize: '13px', color: '#172B24', fontWeight: 500 }}>
               {selectedAddr ? (
                 <>Deliver to: <strong>{selectedAddr.recipient}</strong> - {selectedAddr.addressLine}, {selectedAddr.city}</>
@@ -177,7 +174,7 @@ export default function CartPage() {
 
         <div className="row g-4">
           
-          {/* LEFT COLUMN: Cart Items & Last Minute Buys */}
+          {/* LEFT COLUMN: Cart Items */}
           <div className="col-lg-8">
             
             {/* Header: X ITEMS IN YOUR CART + ADD ITEMS link */}
@@ -194,7 +191,7 @@ export default function CartPage() {
               </Link>
             </div>
 
-            {/* Shipment Card Container (Matches image_7e7c8793) */}
+            {/* Shipment Card Container */}
             <div className="card-auramed p-0 mb-4 overflow-hidden border">
               
               {/* Delivery Schedule Header */}
@@ -246,7 +243,7 @@ export default function CartPage() {
                         {item.brand} • Bottle/Pack of 1
                       </div>
 
-                      {/* Purple Promo Tag (Matches image_7e7c8793: ADD 2 MORE, SAVE 4% EXTRA) */}
+                      {/* Purple Promo Tag */}
                       <div className="mb-2">
                         <span 
                           className="badge py-1 px-2 fw-semibold"
@@ -276,7 +273,7 @@ export default function CartPage() {
                       </div>
                     </div>
 
-                    {/* Right Controls: Trash Icon + Qty Select Dropdown (Matches image_7e7c8793) */}
+                    {/* Right Controls: Trash Icon + Qty Select Dropdown */}
                     <div className="d-flex flex-column align-items-end justify-content-between h-100" style={{ minHeight: '90px' }}>
                       <button
                         onClick={() => removeFromCart(item.id)}
@@ -287,7 +284,7 @@ export default function CartPage() {
                         <FaTrashAlt size={15} color="#8A9992" />
                       </button>
 
-                      {/* Qty Dropdown Button (Qty 1 ∨) */}
+                      {/* Qty Dropdown Button */}
                       <div className="position-relative mt-auto">
                         <select
                           className="form-select form-select-sm fw-bold border"
@@ -316,7 +313,186 @@ export default function CartPage() {
 
             </div>
 
-            {/* 2. LAST MINUTE BUYS CAROUSEL (Matches image_7e7c8793) */}
+          </div>
+
+          {/* RIGHT COLUMN: Offers, Cart Breakdown, Place Order, Payment Offers, Last Minute Buys */}
+          <div className="col-lg-4">
+            
+            {/* OFFERS & DISCOCOUNTS */}
+            <div className="mb-3">
+              <span className="text-secondary text-uppercase fw-bold mb-2 d-block" style={{ fontSize: '12px', letterSpacing: '0.8px' }}>
+                OFFERS & DISCOUNTS
+              </span>
+
+              <div 
+                onClick={() => setShowCouponModal(!showCouponModal)}
+                className="p-3 rounded-3 d-flex align-items-center justify-content-between shadow-sm cursor-pointer"
+                style={{ 
+                  backgroundColor: '#EAF7F0', 
+                  border: '1px solid #C4EDD8', 
+                  cursor: 'pointer' 
+                }}
+              >
+                <div className="d-flex align-items-center gap-3">
+                  <div 
+                    className="rounded-circle d-flex align-items-center justify-content-center text-white"
+                    style={{ width: '32px', height: '32px', backgroundColor: '#159B64' }}
+                  >
+                    <FaPercent size={14} />
+                  </div>
+                  <div>
+                    <div className="fw-bold text-dark" style={{ fontSize: '14px' }}>
+                      {coupon ? `Coupon Applied: ${coupon.code}` : 'Apply Coupon'}
+                    </div>
+                    <small className="text-secondary" style={{ fontSize: '11px' }}>
+                      {coupon ? coupon.name : 'Click to apply coupon codes'}
+                    </small>
+                  </div>
+                </div>
+
+                <FaChevronRight size={14} color="#159B64" />
+              </div>
+
+              {/* Coupon Drawer */}
+              {showCouponModal && (
+                <div className="mt-2 p-3 bg-white border rounded-3 shadow-sm">
+                  {coupon ? (
+                    <div className="d-flex align-items-center justify-content-between">
+                      <span className="badge bg-success">{coupon.code} (Active)</span>
+                      <button onClick={removeCoupon} className="btn btn-sm btn-link text-danger p-0">Remove</button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleApplyCoupon}>
+                      <div className="input-group input-group-sm mb-2">
+                        <input
+                          type="text"
+                          className="form-control text-uppercase"
+                          placeholder="e.g. HEALTH20"
+                          value={couponInput}
+                          onChange={(e) => setCouponInput(e.target.value)}
+                        />
+                        <button type="submit" className="btn btn-auramed">Apply</button>
+                      </div>
+                      {couponError && <small className="text-danger d-block mb-1">{couponError}</small>}
+                      <div className="d-flex flex-wrap gap-1 mt-1">
+                        {['HEALTH20', 'FIRST50', 'CARE10'].map(code => (
+                          <button
+                            key={code}
+                            type="button"
+                            onClick={() => {
+                              applyCoupon(code);
+                              setShowCouponModal(false);
+                            }}
+                            className="btn btn-sm btn-light border py-0 px-2"
+                            style={{ fontSize: '11px' }}
+                          >
+                            {code}
+                          </button>
+                        ))}
+                      </div>
+                    </form>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Cart Breakdown */}
+            <div className="mb-4">
+              <h5 className="fw-bold text-dark mb-2" style={{ fontSize: '16px' }}>
+                Cart Breakdown
+              </h5>
+
+              <div className="card-auramed p-0 overflow-hidden shadow-sm border mb-3">
+                
+                {/* Total Bill Row */}
+                <div 
+                  onClick={() => setShowBreakdownDetails(!showBreakdownDetails)}
+                  className="p-3 d-flex align-items-center justify-content-between cursor-pointer"
+                  style={{ cursor: 'pointer', backgroundColor: '#FFFFFF' }}
+                >
+                  <div className="d-flex align-items-center gap-3">
+                    <FaReceipt size={22} color="#172B24" />
+                    <div>
+                      <div className="fw-bold text-dark" style={{ fontSize: '14px' }}>Total Bill</div>
+                      <small className="text-secondary" style={{ fontSize: '11px' }}>Incl. charges</small>
+                    </div>
+                  </div>
+
+                  <div className="d-flex align-items-center gap-2">
+                    <span className="text-secondary text-decoration-line-through" style={{ fontSize: '13px' }}>
+                      ₹{totalMrp.toFixed(2)}
+                    </span>
+                    <span className="fw-bold text-dark fs-6">
+                      ₹{finalTotal.toFixed(2)}
+                    </span>
+                    <FaChevronRight size={12} color="#64756D" />
+                  </div>
+                </div>
+
+                {/* Optional Expandable Breakdown Details */}
+                {showBreakdownDetails && (
+                  <div className="p-3 bg-light border-top" style={{ fontSize: '13px' }}>
+                    <div className="d-flex justify-content-between mb-1 text-secondary">
+                      <span>Items MRP Total:</span>
+                      <span>₹{totalMrp.toFixed(2)}</span>
+                    </div>
+                    <div className="d-flex justify-content-between mb-1 text-success">
+                      <span>Catalog Discount:</span>
+                      <span>-₹{(totalMrp - subtotal).toFixed(2)}</span>
+                    </div>
+                    {couponDiscount > 0 && (
+                      <div className="d-flex justify-content-between mb-1 text-success">
+                        <span>Coupon Savings ({coupon.code}):</span>
+                        <span>-₹{couponDiscount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div className="d-flex justify-content-between mb-1 text-secondary">
+                      <span>Delivery Fee:</span>
+                      <span>{shippingFee === 0 ? <strong className="text-success">FREE</strong> : `₹${shippingFee.toFixed(2)}`}</span>
+                    </div>
+                    <div className="d-flex justify-content-between text-secondary">
+                      <span>Estimated Tax (5%):</span>
+                      <span>₹{tax.toFixed(2)}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Green Savings Alert Ribbon */}
+                <div 
+                  className="px-3 py-2 d-flex align-items-center gap-2"
+                  style={{ backgroundColor: '#EAF7F0', borderTop: '1px solid #D1EFE0' }}
+                >
+                  <FaCheckCircle color="#159B64" size={13} />
+                  <span className="fw-bold text-dark-green" style={{ fontSize: '12px' }}>
+                    You will save ₹{totalSavings.toFixed(2)} on this order.
+                  </span>
+                </div>
+
+              </div>
+
+              {/* GREEN PLACE ORDER BUTTON */}
+              <div className="mt-3">
+                <p className="text-secondary mb-2" style={{ fontSize: '12px' }}>
+                  By placing the order, you agree to AuraMed's <a href="#" className="text-success text-decoration-none fw-bold">Terms of Use</a> and <a href="#" className="text-success text-decoration-none fw-bold">Privacy Policy</a>
+                </p>
+                <button
+                  onClick={() => navigate('/checkout')}
+                  className="btn text-white fw-bold text-uppercase w-100 shadow-sm"
+                  style={{ 
+                    backgroundColor: '#0A553E', // Green Color
+                    borderRadius: '0px',       
+                    fontSize: '15px',
+                    height: '48px',
+                    letterSpacing: '0.5px'
+                  }}
+                >
+                  PLACE ORDER
+                </button>
+              </div>
+
+            </div>
+
+            {/* LAST MINUTE BUYS CAROUSEL (Moved below Place Order) */}
             <div className="mt-4">
               <div className="d-flex align-items-center justify-content-between mb-3">
                 <h5 className="fw-bold text-uppercase mb-0" style={{ color: '#093B2B', fontSize: '14px', letterSpacing: '0.5px' }}>
@@ -415,238 +591,10 @@ export default function CartPage() {
                 </div>
               </div>
             </div>
-
-          </div>
-
-          {/* RIGHT COLUMN: Offers, Cart Breakdown, Payment Offers */}
-          <div className="col-lg-4">
-            
-            {/* OFFERS & DISCOUNTS (Matches image_7e7c8793) */}
-            <div className="mb-3">
-              <span className="text-secondary text-uppercase fw-bold mb-2 d-block" style={{ fontSize: '12px', letterSpacing: '0.8px' }}>
-                OFFERS & DISCOUNTS
-              </span>
-
-              <div 
-                onClick={() => setShowCouponModal(!showCouponModal)}
-                className="p-3 rounded-3 d-flex align-items-center justify-content-between shadow-sm cursor-pointer"
-                style={{ 
-                  backgroundColor: '#EAF7F0', 
-                  border: '1px solid #C4EDD8', 
-                  cursor: 'pointer' 
-                }}
-              >
-                <div className="d-flex align-items-center gap-3">
-                  <div 
-                    className="rounded-circle d-flex align-items-center justify-content-center text-white"
-                    style={{ width: '32px', height: '32px', backgroundColor: '#159B64' }}
-                  >
-                    <FaPercent size={14} />
-                  </div>
-                  <div>
-                    <div className="fw-bold text-dark" style={{ fontSize: '14px' }}>
-                      {coupon ? `Coupon Applied: ${coupon.code}` : 'Apply Coupon'}
-                    </div>
-                    <small className="text-secondary" style={{ fontSize: '11px' }}>
-                      {coupon ? coupon.name : 'Click to apply coupon codes'}
-                    </small>
-                  </div>
-                </div>
-
-                <FaChevronRight size={14} color="#159B64" />
-              </div>
-
-              {/* Coupon Drawer */}
-              {showCouponModal && (
-                <div className="mt-2 p-3 bg-white border rounded-3 shadow-sm">
-                  {coupon ? (
-                    <div className="d-flex align-items-center justify-content-between">
-                      <span className="badge bg-success">{coupon.code} (Active)</span>
-                      <button onClick={removeCoupon} className="btn btn-sm btn-link text-danger p-0">Remove</button>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleApplyCoupon}>
-                      <div className="input-group input-group-sm mb-2">
-                        <input
-                          type="text"
-                          className="form-control text-uppercase"
-                          placeholder="e.g. HEALTH20"
-                          value={couponInput}
-                          onChange={(e) => setCouponInput(e.target.value)}
-                        />
-                        <button type="submit" className="btn btn-auramed">Apply</button>
-                      </div>
-                      {couponError && <small className="text-danger d-block mb-1">{couponError}</small>}
-                      <div className="d-flex flex-wrap gap-1 mt-1">
-                        {['HEALTH20', 'FIRST50', 'CARE10'].map(code => (
-                          <button
-                            key={code}
-                            type="button"
-                            onClick={() => {
-                              applyCoupon(code);
-                              setShowCouponModal(false);
-                            }}
-                            className="btn btn-sm btn-light border py-0 px-2"
-                            style={{ fontSize: '11px' }}
-                          >
-                            {code}
-                          </button>
-                        ))}
-                      </div>
-                    </form>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Cart Breakdown (Matches image_7e7c8793) */}
-            <div className="mb-4">
-              <h5 className="fw-bold text-dark mb-2" style={{ fontSize: '16px' }}>
-                Cart Breakdown
-              </h5>
-
-              <div className="card-auramed p-0 overflow-hidden shadow-sm border">
-                
-                {/* Total Bill Row */}
-                <div 
-                  onClick={() => setShowBreakdownDetails(!showBreakdownDetails)}
-                  className="p-3 d-flex align-items-center justify-content-between cursor-pointer"
-                  style={{ cursor: 'pointer', backgroundColor: '#FFFFFF' }}
-                >
-                  <div className="d-flex align-items-center gap-3">
-                    <FaReceipt size={22} color="#172B24" />
-                    <div>
-                      <div className="fw-bold text-dark" style={{ fontSize: '14px' }}>Total Bill</div>
-                      <small className="text-secondary" style={{ fontSize: '11px' }}>Incl. charges</small>
-                    </div>
-                  </div>
-
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="text-secondary text-decoration-line-through" style={{ fontSize: '13px' }}>
-                      ₹{totalMrp.toFixed(2)}
-                    </span>
-                    <span className="fw-bold text-dark fs-6">
-                      ₹{finalTotal.toFixed(2)}
-                    </span>
-                    <FaChevronRight size={12} color="#64756D" />
-                  </div>
-                </div>
-
-                {/* Optional Expandable Breakdown Details */}
-                {showBreakdownDetails && (
-                  <div className="p-3 bg-light border-top" style={{ fontSize: '13px' }}>
-                    <div className="d-flex justify-content-between mb-1 text-secondary">
-                      <span>Items MRP Total:</span>
-                      <span>₹{totalMrp.toFixed(2)}</span>
-                    </div>
-                    <div className="d-flex justify-content-between mb-1 text-success">
-                      <span>Catalog Discount:</span>
-                      <span>-₹{(totalMrp - subtotal).toFixed(2)}</span>
-                    </div>
-                    {couponDiscount > 0 && (
-                      <div className="d-flex justify-content-between mb-1 text-success">
-                        <span>Coupon Savings ({coupon.code}):</span>
-                        <span>-₹{couponDiscount.toFixed(2)}</span>
-                      </div>
-                    )}
-                    <div className="d-flex justify-content-between mb-1 text-secondary">
-                      <span>Delivery Fee:</span>
-                      <span>{shippingFee === 0 ? <strong className="text-success">FREE</strong> : `₹${shippingFee.toFixed(2)}`}</span>
-                    </div>
-                    <div className="d-flex justify-content-between text-secondary">
-                      <span>Estimated Tax (5%):</span>
-                      <span>₹{tax.toFixed(2)}</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Green Savings Alert Ribbon (Matches image_7e7c8793: You will save ₹582.5 on this order.) */}
-                <div 
-                  className="px-3 py-2 d-flex align-items-center gap-2"
-                  style={{ backgroundColor: '#EAF7F0', borderTop: '1px solid #D1EFE0' }}
-                >
-                  <FaCheckCircle color="#159B64" size={13} />
-                  <span className="fw-bold text-dark-green" style={{ fontSize: '12px' }}>
-                    You will save ₹{totalSavings.toFixed(2)} on this order.
-                  </span>
-                </div>
-
-              </div>
-            </div>
-
-            {/* Available Payment Offers Card (Matches image_7e7c8793) */}
-            <div className="mb-4">
-              <div className="fw-bold text-dark mb-1" style={{ fontSize: '14px' }}>
-                Available Payment Offers
-              </div>
-              <small className="text-secondary d-block mb-2" style={{ fontSize: '12px' }}>
-                Offer auto-applies at checkout
-              </small>
-
-              <div 
-                className="p-3 rounded-3 bg-white border d-flex align-items-center justify-content-between shadow-sm"
-              >
-                <div className="d-flex align-items-center gap-3">
-                  <div 
-                    className="p-2 rounded bg-light border fw-bold text-primary"
-                    style={{ fontSize: '11px', letterSpacing: '0.5px' }}
-                  >
-                    PAYTM UPI
-                  </div>
-                  <div>
-                    <div className="fw-bold text-success" style={{ fontSize: '13px' }}>
-                      Flat ₹50.00 Cashback
-                    </div>
-                    <small className="text-danger fw-semibold" style={{ fontSize: '11px' }}>
-                      Offer Unlocked!
-                    </small>
-                  </div>
-                </div>
-
-                <FaChevronRight size={12} color="#64756D" />
-              </div>
-            </div>
-
           </div>
 
         </div>
 
-      </div>
-
-      {/* 3. Sticky Bottom Checkout Bar (Matches image_7e7c8793: Amount to pay ⌃ ₹476.58 + Proceed button) */}
-      <div 
-        className="position-fixed bottom-0 start-0 end-0 bg-white border-top shadow-lg p-3 z-3"
-        style={{ zIndex: 1050 }}
-      >
-        <div className="container-xl d-flex align-items-center justify-content-between">
-          <div>
-            <div 
-              onClick={() => setShowBreakdownDetails(!showBreakdownDetails)}
-              className="text-secondary d-flex align-items-center gap-1 cursor-pointer" 
-              style={{ fontSize: '12px', cursor: 'pointer' }}
-            >
-              <span>Amount to pay</span>
-              {showBreakdownDetails ? <FaChevronDown size={10} /> : <FaChevronUp size={10} />}
-            </div>
-            <div className="fw-bold text-dark fs-4" style={{ letterSpacing: '-0.5px', lineHeight: 1.1 }}>
-              ₹{finalTotal.toFixed(2)}
-            </div>
-          </div>
-
-          <button
-            onClick={() => navigate('/checkout')}
-            className="btn text-white fw-bold px-4 py-2 text-uppercase shadow-sm"
-            style={{ 
-              backgroundColor: '#0A553E', 
-              borderRadius: '6px', 
-              fontSize: '15px',
-              minWidth: '170px',
-              height: '46px'
-            }}
-          >
-            Proceed
-          </button>
-        </div>
       </div>
 
       {/* Address Selection & Creation Modal */}

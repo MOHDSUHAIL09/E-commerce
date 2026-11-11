@@ -5,11 +5,11 @@ import { FaUser } from 'react-icons/fa';
 
 const BOTTOM_NAVIGATION_STYLES = `
 :root {
-  --bar-body-height: 56px;
-  --bar-total-height: 74px;
+  --bar-body-height: 58px;
+  --bar-total-height: 76px;
   --nav-element-gap: 8px;
-  --active-green: #0E738A; /* Darker green for white bg visibility */
-  --active-green-light: #15b59b;
+  --active-green: #0E738A;
+  --active-green-light: #10b981; /* Premium vibrant green */
 }
 
 .bottom-navigation-container {
@@ -22,7 +22,7 @@ const BOTTOM_NAVIGATION_STYLES = `
   justify-content: center;
   align-items: center;
   user-select: none;
-  padding: 0 16px 16px 16px;
+  padding: 0 16px 20px 16px;
   box-sizing: border-box;
   pointer-events: none;
   z-index: 1040;
@@ -33,7 +33,7 @@ const BOTTOM_NAVIGATION_STYLES = `
   align-items: flex-end;
   justify-content: center;
   width: 100%;
-  max-width: 100%;
+  max-width: 540px; /* Premium apps have a slight max-width to look contained */
   margin: 0 auto;
   box-sizing: border-box;
   pointer-events: auto;
@@ -46,58 +46,64 @@ const BOTTOM_NAVIGATION_STYLES = `
   height: var(--bar-total-height);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  /* Glassmorphism effect */
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  margin-top: 18px; /* Space for floating disc */
-  height: 56px;
+  /* Premium Liquid Glassmorphism Effect */
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  box-shadow: 
+    0 10px 40px -10px rgba(0, 0, 0, 0.15),
+    0 4px 12px -2px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  margin-top: 20px;
+  height: var(--bar-body-height);
 }
 
 .notch-nav-svg {
   position: absolute;
-  top: -18px; /* Offset for the floating notch */
+  top: -20px;
   left: 0;
   width: 100%;
-  height: 74px;
+  height: var(--bar-total-height);
   overflow: visible;
   pointer-events: none;
 }
 
 .crater-moving-group {
-  transition: transform 380ms cubic-bezier(0.34, 1.35, 0.64, 1);
+  transition: transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
   will-change: transform;
 }
 
 .active-floating-disc-holder {
   position: absolute;
-  top: -18px;
+  top: -20px;
   left: 0;
   width: 0;
   height: var(--bar-total-height);
   pointer-events: none;
-  transition: transform 380ms cubic-bezier(0.34, 1.35, 0.64, 1);
+  transition: transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
   will-change: transform;
 }
 
-/* --- ACTIVE FLOATING GLASS DISC --- */
+/* --- PREMIUM ACTIVE FLOATING DISC --- */
 .active-floating-disc {
   position: absolute;
-  top: 28px;
+  top: 30px;
   left: 0;
   transform: translate(-50%, -50%);
-  width: 46px;
-  height: 46px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--active-green), var(--active-green-light));
-  border: 2px solid rgba(255, 255, 255, 0.9);
+  border: 3px solid #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 16px rgba(14, 115, 138, 0.3), 0 0 0 4px rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 8px 24px rgba(16, 185, 129, 0.4), 
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 0 0 4px rgba(255, 255, 255, 0.6);
   transition: transform 200ms cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 200ms ease, border-color 200ms ease;
   will-change: transform;
 }
@@ -109,8 +115,8 @@ const BOTTOM_NAVIGATION_STYLES = `
   transition: transform 180ms ease;
 }
 
-.phase-pressed .active-floating-disc { transform: translate(-50%, -50%) scale(0.92) translateY(3px); }
-.phase-rising .active-floating-disc { transform: translate(-50%, -50%) scale(1.08) translateY(-4px); }
+.phase-pressed .active-floating-disc { transform: translate(-50%, -50%) scale(0.92) translateY(4px); }
+.phase-rising .active-floating-disc { transform: translate(-50%, -50%) scale(1.08) translateY(-5px); }
 .phase-settling .active-floating-disc { transform: translate(-50%, -50%) scale(1.02) translateY(1px); }
 .phase-idle .active-floating-disc { transform: translate(-50%, -50%) scale(1) translateY(0); }
 
@@ -141,7 +147,7 @@ const BOTTOM_NAVIGATION_STYLES = `
 .notch-slot-btn:focus-visible {
   outline: 2px solid var(--active-green);
   outline-offset: 2px;
-  border-radius: 14px;
+  border-radius: 16px;
 }
 
 .slot-content-stack {
@@ -151,7 +157,7 @@ const BOTTOM_NAVIGATION_STYLES = `
   justify-content: flex-end;
   height: 100%;
   width: 100%;
-  padding-bottom: 6px;
+  padding-bottom: 8px;
   box-sizing: border-box;
   pointer-events: none;
 }
@@ -160,49 +166,51 @@ const BOTTOM_NAVIGATION_STYLES = `
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   transition: opacity 220ms ease, transform 220ms ease, filter 220ms ease;
   will-change: opacity, transform;
 }
 
 .slot-icon-holder.icon-hidden {
   opacity: 0;
-  transform: scale(0.6) translateY(-4px);
+  transform: scale(0.5) translateY(-5px);
   pointer-events: none;
 }
 
 .slot-icon-holder.icon-visible {
-  opacity: 0.9;
+  opacity: 0.85;
   transform: scale(1) translateY(0);
 }
 
 .notch-slot-btn:hover .slot-icon-holder.icon-visible {
   opacity: 1;
-  transform: scale(1.08) translateY(-1px);
+  transform: scale(1.1) translateY(-1px);
 }
 
 .slot-label-text {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: -0.2px;
-  line-height: 12px;
+  letter-spacing: -0.3px;
+  line-height: 13px;
   text-align: center;
   white-space: nowrap;
   user-select: none;
-  transition: color 220ms ease, opacity 220ms ease, text-shadow 220ms ease, transform 220ms ease;
+  transition: color 220ms ease, opacity 220ms ease, transform 220ms ease;
 }
 
-/* Darker text for better visibility on white background */
-.slot-label-text.label-inactive { color: #4B5563; opacity: 0.9; }
-.slot-label-text.label-active { color: var(--active-green); opacity: 1; font-weight: 700; }
+/* Premium colored text */
+.slot-label-text.label-inactive { color: #64748b; opacity: 1; }
+.slot-label-text.label-active { color: var(--active-green); opacity: 1; font-weight: 800; }
 
 @media (max-width: 640px) {
-  .bottom-navigation-container { padding: 0 12px 12px 12px; }
-  .active-floating-disc { width: 46px; height: 46px; top: 28px; }
+  .bottom-navigation-container { padding: 0 12px 16px 12px; }
+  .bottom-nav-suite { max-width: 100%; }
+  .active-floating-disc { width: 48px; height: 48px; top: 28px; }
 }
 
 @media (max-width: 380px) {
-  .active-floating-disc { width: 42px; height: 42px; top: 26px; }
+  .slot-label-text { font-size: 10px; }
+  .active-floating-disc { width: 44px; height: 44px; top: 26px; }
 }
 `;
 
@@ -213,9 +221,9 @@ const NAV_SLOTS = [
     path: '/',
     match: ['/'],
     icon: (isActive) => (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill={isActive ? '#FFFFFF' : 'none'} stroke={isActive ? '#FFFFFF' : '#4B5563'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill={isActive ? '#FFFFFF' : 'none'} stroke={isActive ? '#FFFFFF' : '#64748b'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-        <polyline points="9 22 9 12 15 12 15 22" fill={isActive ? 'var(--active-green)' : 'none'} stroke={isActive ? 'var(--active-green)' : '#4B5563'}></polyline>
+        <polyline points="9 22 9 12 15 12 15 22" fill={isActive ? 'var(--active-green)' : 'none'} stroke={isActive ? 'var(--active-green)' : '#64748b'}></polyline>
       </svg>
     )
   },
@@ -226,10 +234,10 @@ const NAV_SLOTS = [
     match: ['/doctors'],
     icon: (isActive) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M7 4V10C7 12.7614 9.23858 15 12 15C14.7614 15 17 12.7614 17 10V4" stroke={isActive ? '#FFFFFF' : '#4B5563'} strokeWidth="2" strokeLinecap="round"/>
-        <path d="M5 4H9M15 4H19" stroke={isActive ? '#FFFFFF' : '#4B5563'} strokeWidth="2" strokeLinecap="round"/>
-        <path d="M12 15V17C12 18.6569 13.3431 20 15 20H17" stroke={isActive ? '#FFFFFF' : '#4B5563'} strokeWidth="2" strokeLinecap="round"/>
-        <circle cx="18" cy="20" r="2" fill={isActive ? '#FFFFFF' : '#4B5563'}/>
+        <path d="M7 4V10C7 12.7614 9.23858 15 12 15C14.7614 15 17 12.7614 17 10V4" stroke={isActive ? '#FFFFFF' : '#64748b'} strokeWidth="2.2" strokeLinecap="round"/>
+        <path d="M5 4H9M15 4H19" stroke={isActive ? '#FFFFFF' : '#64748b'} strokeWidth="2.2" strokeLinecap="round"/>
+        <path d="M12 15V17C12 18.6569 13.3431 20 15 20H17" stroke={isActive ? '#FFFFFF' : '#64748b'} strokeWidth="2.2" strokeLinecap="round"/>
+        <circle cx="18" cy="20" r="2" fill={isActive ? '#FFFFFF' : '#64748b'}/>
       </svg>
     )
   },
@@ -240,9 +248,9 @@ const NAV_SLOTS = [
     match: ['/products', '/categories'],
     icon: (isActive) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <rect x="7" y="3" width="10" height="3.5" rx="1.5" stroke={isActive ? '#FFFFFF' : '#4B5563'} strokeWidth="2"/>
-        <path d="M5 8C5 6.89543 5.89543 6 7 6H17C18.1046 6 19 6.89543 19 8V19C19 20.1046 18.1046 21 17 21H7C5.89543 21 5 20.1046 5 19V8Z" stroke={isActive ? '#FFFFFF' : '#4B5563'} strokeWidth="2"/>
-        <path d="M12 10.5V16.5M9 13.5H15" stroke={isActive ? '#FFFFFF' : '#4B5563'} strokeWidth="2" strokeLinecap="round"/>
+        <rect x="7" y="3" width="10" height="3.5" rx="1.5" stroke={isActive ? '#FFFFFF' : '#64748b'} strokeWidth="2.2"/>
+        <path d="M5 8C5 6.89543 5.89543 6 7 6H17C18.1046 6 19 6.89543 19 8V19C19 20.1046 18.1046 21 17 21H7C5.89543 21 5 20.1046 5 19V8Z" stroke={isActive ? '#FFFFFF' : '#64748b'} strokeWidth="2.2"/>
+        <path d="M12 10.5V16.5M9 13.5H15" stroke={isActive ? '#FFFFFF' : '#64748b'} strokeWidth="2.2" strokeLinecap="round"/>
       </svg>
     )
   },
@@ -253,8 +261,8 @@ const NAV_SLOTS = [
     match: ['/lab-tests'],
     icon: (isActive) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M8 3H16M10 3V17C10 18.1046 10.8954 19 12 19C13.1046 19 14 18.1046 14 17V3" stroke={isActive ? '#FFFFFF' : '#4B5563'} strokeWidth="2" strokeLinecap="round"/>
-        <path d="M9 11H13M9 14.5H12" stroke={isActive ? '#FFFFFF' : '#4B5563'} strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M8 3H16M10 3V17C10 18.1046 10.8954 19 12 19C13.1046 19 14 18.1046 14 17V3" stroke={isActive ? '#FFFFFF' : '#64748b'} strokeWidth="2.2" strokeLinecap="round"/>
+        <path d="M9 11H13M9 14.5H12" stroke={isActive ? '#FFFFFF' : '#64748b'} strokeWidth="1.8" strokeLinecap="round"/>
       </svg>
     )
   },
@@ -264,7 +272,7 @@ const NAV_SLOTS = [
     isAction: true,
     match: ['/account'],
     icon: (isActive) => (
-      <FaUser size={20} color={isActive ? '#FFFFFF' : '#4B5563'} />
+      <FaUser size={20} color={isActive ? '#FFFFFF' : '#64748b'} />
     )
   }
 ];
@@ -398,11 +406,12 @@ export default function MobileBottomNavbar({ onOpenLogin = null } = {}) {
             className="notch-nav-root" role="navigation"
             aria-label="Bottom Navigation Bar">
             <svg className="notch-nav-svg"
-              viewBox={`0 0 ${barWidth} 74`}
+              viewBox={`0 0 ${barWidth} 76`}
               preserveAspectRatio="none">
               <defs>
+                {/* Mask to cut out the notch for the glass background */}
                 <mask id="bar-crater-cutout-mask" maskUnits="userSpaceOnUse">
-                  <rect x="0" y="0" width={barWidth} height="74" fill="#ffffff" />
+                  <rect x="0" y="0" width={barWidth} height="76" fill="#ffffff" />
                   <g className="crater-moving-group"
                     style={{ transform: `translateX(${activeX}px)` }}>
                     <path d={craterCutoutPathD} fill="#000" />
@@ -410,11 +419,11 @@ export default function MobileBottomNavbar({ onOpenLogin = null } = {}) {
                 </mask>
 
                 <clipPath id="barBoundaryClip">
-                  <rect x="0" y="18" width={barWidth} height="56" rx="20" />
+                  <rect x="0" y="20" width={barWidth} height="56" rx="24" />
                 </clipPath>
 
                 <filter id="navBarGlow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feGaussianBlur stdDeviation="4" result="blur" />
                   <feMerge>
                     <feMergeNode in="blur" />
                     <feMergeNode in="SourceGraphic" />
@@ -422,30 +431,28 @@ export default function MobileBottomNavbar({ onOpenLogin = null } = {}) {
                 </filter>
               </defs>
 
-              {/* Glassmorphism background handled by CSS, but we need the notch cutout */}
-              {/* We use a transparent fill with mask so the CSS background shows through the cutout */}
-              <rect x="0" y="18" width={Math.max(barWidth, 0)} height="56" rx="20"
+              {/* This transparent rect with the mask ensures the CSS background gets the hole cut out */}
+              <rect x="0" y="20" width={Math.max(barWidth, 0)} height="56" rx="24"
                 fill="transparent"
                 mask="url(#bar-crater-cutout-mask)" />
 
-              {/* Green Glowing Border around the notch and bar */}
-              {barWidth > 2 && (
-                <rect x="1" y="19" width={barWidth - 2} height="54" rx="19"
-                  fill="none" stroke="rgba(21, 181, 155, 0.4)" strokeWidth="2"
-                  filter="url(#navBarGlow)"
-                  mask="url(#bar-crater-cutout-mask)" />
-              )}
-
-              <rect x="1" y="19" width={barWidth - 2} height="54" rx="19"
-                fill="none" stroke="rgba(21, 181, 155, 0.8)" strokeWidth="1"
-                opacity="0.9"
+              {/* Premium Subtle Green Glow Border around the entire bar */}
+              <rect x="1" y="21" width={barWidth - 2} height="54" rx="23"
+                fill="none" stroke="rgba(16, 185, 129, 0.3)" strokeWidth="1.5"
+                filter="url(#navBarGlow)"
                 mask="url(#bar-crater-cutout-mask)" />
 
+              {/* Crisp Inner white border */}
+              <rect x="1" y="21" width={barWidth - 2} height="54" rx="23"
+                fill="none" stroke="rgba(255, 255, 255, 1)" strokeWidth="1"
+                mask="url(#bar-crater-cutout-mask)" />
+
+              {/* Glowing green stroke for the notch curve */}
               <g clipPath="url(#barBoundaryClip)">
                 <g className="crater-moving-group"
                   style={{ transform: `translateX(${activeX}px)` }}>
                   <path d={craterBorderStrokeD} fill="none"
-                    stroke="#15b59b" strokeWidth="2.5" strokeLinecap="round"
+                    stroke="var(--active-green-light)" strokeWidth="2.5" strokeLinecap="round"
                     filter="url(#navBarGlow)" />
                   <path d={craterBorderStrokeD} fill="none"
                     stroke="rgba(255, 255, 255, 1)" strokeWidth="1" strokeLinecap="round" />

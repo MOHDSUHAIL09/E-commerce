@@ -64,17 +64,6 @@ const DEFAULT_ADDRESSES = [
     zipCode: '10001',
     isDefault: true
   },
-  {
-    id: 'addr-2',
-    type: 'Work',
-    recipient: 'Alex Morgan',
-    phone: '+1 (555) 234-5678',
-    addressLine: '350 5th Avenue, Empire Health Suite 1800',
-    city: 'New York',
-    state: 'NY',
-    zipCode: '10118',
-    isDefault: false
-  }
 ];
 
 // Module-level auth state without React Context

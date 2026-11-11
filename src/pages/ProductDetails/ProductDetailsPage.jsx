@@ -63,11 +63,6 @@ export default function ProductDetailsPage() {
   const isFav = isInWishlist(product.id);
   const relatedProducts = productsList.filter(p => p.categorySlug === product.categorySlug && p.id !== product.id).slice(0, 4);
 
-  const handleBuyNow = () => {
-    addToCart(product, qty);
-    navigate('/checkout');
-  };
-
   const handleAddReview = (e) => {
     e.preventDefault();
     if (!newReviewText.trim()) return;
@@ -89,18 +84,6 @@ export default function ProductDetailsPage() {
     <div className="py-4">
       <div className="container-xl">
         
-        {/* Breadcrumb */}
-        <nav aria-label="breadcrumb" className="mb-3">
-          <ol className="breadcrumb" style={{ fontSize: '13px' }}>
-            <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-            <li className="breadcrumb-item"><Link to="/products">Medicines</Link></li>
-            <li className="breadcrumb-item"><Link to={`/categories/${product.categorySlug}`}>{product.category}</Link></li>
-            <li className="breadcrumb-item active text-truncate" style={{ maxWidth: '280px' }} aria-current="page">
-              {product.name}
-            </li>
-          </ol>
-        </nav>
-
         {/* Main Product Info Card */}
         <div className="card-auramed p-4 p-md-5 mb-5">
           <div className="row g-4 g-lg-5">
@@ -223,13 +206,6 @@ export default function ProductDetailsPage() {
                   className="btn btn-auramed py-2 px-4 flex-grow-1"
                 >
                   <FaShoppingCart /> Add to Cart (₹{((product.inrPrice || product.price * 25) * qty).toFixed(0)})
-                </button>
-
-                <button
-                  onClick={handleBuyNow}
-                  className="btn btn-warning fw-bold py-2 px-4 text-dark d-flex align-items-center gap-2"
-                >
-                  Buy Now
                 </button>
               </div>
 
