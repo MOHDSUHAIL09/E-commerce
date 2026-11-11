@@ -1,288 +1,811 @@
+
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { FaChevronLeft, FaChevronRight, FaStar, FaCheck, FaPlus, FaMinus, FaHeart } from 'react-icons/fa';
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaStar,
+  FaPlus,
+  FaMinus,
+  FaHeart,
+  FaShoppingCart,
+  FaEye
+} from 'react-icons/fa';
+
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
-export default function ProductSlider({ title, subtitle, products = [], viewAllLink = '/products' }) {
+export default function ProductSlider({
+  title,
+  subtitle,
+  products = [],
+  viewAllLink = '/products'
+}) {
   const scrollRef = useRef(null);
-  const { addToCart, updateQuantity, removeFromCart, cartItems } = useCart();
+
+  const {
+    addToCart,
+    updateQuantity,
+    removeFromCart,
+    cartItems
+  } = useCart();
+
   const { isInWishlist, toggleWishlist } = useWishlist();
 
+  // Scroll full visible row
   const handleScroll = (direction) => {
-    if (scrollRef.current) {
-      const isMobile = window.innerWidth < 576;
-      const scrollAmount = isMobile 
-        ? (direction === 'left' ? -scrollRef.current.clientWidth : scrollRef.current.clientWidth)
-        : (direction === 'left' ? -320 : 320);
-      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
+    if (!scrollRef.current) return;
+
+    const slider = scrollRef.current;
+    const scrollAmount = slider.clientWidth * 0.9;
+
+    slider.scrollBy({
+      left: direction === 'right' ? scrollAmount : -scrollAmount,
+      behavior: 'smooth'
+    });
   };
 
+  // Get cart quantity
   const getCartQuantity = (id) => {
-    const item = cartItems.find(i => i.id === id);
+    const item = cartItems.find((i) => i.id === id);
     return item ? item.quantity : 0;
   };
 
   return (
-    <div className="position-relative">
-      {/* Section Header */}
-      <div className="d-flex align-items-center justify-content-between mb-3">
-        <Link to={viewAllLink} className="text-decoration-none text-dark hover-green">
+    <section className="product-showcase-section">
+
+      {/* SECTION HEADER */}
+      <div className="product-showcase-header">
+
+        <Link
+          to={viewAllLink}
+          className="product-showcase-heading text-decoration-none"
+        >
           {subtitle && (
-            <span className="text-primary-green fw-bold text-uppercase d-block mb-1" style={{ fontSize: '11px', letterSpacing: '0.8px' }}>
+            <span className="product-showcase-subtitle">
               {subtitle}
             </span>
           )}
-          <h3 className="fw-bold mb-0 text-dark" style={{ fontSize: '22px', letterSpacing: '-0.3px' }}>
-            {title}
-          </h3>
+
+          <h3>{title}</h3>
         </Link>
+
+        <div className="product-showcase-navigation">
+
+          <button
+            type="button"
+            onClick={() => handleScroll('left')}
+            aria-label="Previous products"
+          >
+            <FaChevronLeft />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleScroll('right')}
+            aria-label="Next products"
+          >
+            <FaChevronRight />
+          </button>
+
+        </div>
       </div>
 
-      {/* Slider Container with Left & Right Arrows */}
-      <div className="position-relative">
-        {/* Left Arrow Button */}
-        <button
-          onClick={() => handleScroll('left')}
-          className="btn position-absolute top-50 start-0 translate-middle-y z-3 shadow-md rounded-circle d-flex align-items-center justify-content-center p-0"
-          style={{
-            width: '36px',
-            height: '36px',
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #E5ECE8',
-            marginLeft: '-14px',
-            color: '#172B24'
-          }}
-          aria-label="Previous products"
-        >
-          <FaChevronLeft size={13} />
-        </button>
+      {/* PRODUCT SLIDER */}
+      <div className="product-showcase-track-wrapper">
 
-        {/* Right Arrow Button */}
-        <button
-          onClick={() => handleScroll('right')}
-          className="btn position-absolute top-50 end-0 translate-middle-y z-3 shadow-md rounded-circle d-flex align-items-center justify-content-center p-0"
-          style={{
-            width: '36px',
-            height: '36px',
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #E5ECE8',
-            marginRight: '-14px',
-            color: '#172B24'
-          }}
-          aria-label="Next products"
-        >
-          <FaChevronRight size={13} />
-        </button>
-
-        {/* Horizontal Scroll Track */}
-        <div 
+        <div
           ref={scrollRef}
-          className="d-flex gap-2 gap-sm-3 overflow-x-auto pb-3 pt-1 px-1 hide-scrollbar"
-          style={{
-            scrollSnapType: 'x mandatory',
-            scrollBehavior: 'smooth',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-            WebkitOverflowScrolling: 'touch'
-          }}
+          className="product-showcase-track"
         >
+
           {products.map((p) => {
+
             const qty = getCartQuantity(p.id);
+
             const currencySymbol = '₹';
-            const displayPrice = (p.inrPrice || p.price * 25).toFixed(2);
-            const displayMrp = (p.inrMrp || (p.mrp ? p.mrp * 25 : (p.price * 25 * 1.5))).toFixed(0);
-            const discountPct = p.discount || Math.round(((displayMrp - displayPrice) / displayMrp) * 100) || 50;
+
+            const displayPrice = Number(
+              p.inrPrice || p.price * 25
+            ).toFixed(2);
+
+            const displayMrp = Number(
+              p.inrMrp ||
+              (p.mrp
+                ? p.mrp * 25
+                : p.price * 25 * 1.5)
+            ).toFixed(0);
+
+            const discountPct =
+              p.discount ||
+              Math.round(
+                ((displayMrp - displayPrice) / displayMrp) * 100
+              ) || 50;
+
+            const wishlistActive = isInWishlist(p.id);
 
             return (
-              <div 
-                key={p.id}
-                className="bg-white rounded-3 p-2.5 p-sm-3 d-flex flex-column transition-all responsive-slider-card"
-                style={{
-                  border: '1px solid #E5ECE8',  
-                  borderRadius: '12px',
-                  scrollSnapAlign: 'start',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
-                }}
-              >
-                {/* Product Image */}
-                <div 
-                  className="position-relative d-flex align-items-center justify-content-center mb-2"
-                  style={{ height: '125px', backgroundColor: '#FFFFFF' }}
-                >
-                  {/* Circular Wishlist Heart Button (matches image_2a1a68aa) */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      toggleWishlist(p.id);
-                    }}
-                    className="btn position-absolute top-0 end-0 p-0 rounded-circle d-flex align-items-center justify-content-center"
-                    style={{
-                      width: '28px',
-                      height: '28px',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #E5E7EB',
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-                      zIndex: 3
-                    }}
-                    title={isInWishlist(p.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}
-                    aria-label="Wishlist"
-                  >
-                    <FaHeart 
-                      size={13} 
-                      color={isInWishlist(p.id) ? '#E11D48' : '#5C6F66'} 
-                    />
-                  </button>
 
-                  <Link to={`/products/${p.id}`} className="d-flex align-items-center justify-content-center w-100 h-100">
-                    <img 
-                      src={p.image} 
+              <div
+                key={p.id}
+                className="product-showcase-card"
+              >
+
+                {/* PRODUCT IMAGE */}
+                <div className="product-showcase-image">
+
+                  <Link
+                    to={`/products/${p.id}`}
+                    className="product-image-link"
+                  >
+                    <img
+                      src={p.image}
                       alt={p.name}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&auto=format&fit=crop&q=80';
-                      }}
-                      style={{ 
-                        maxHeight: '130px', 
-                        maxWidth: '100%', 
-                        objectFit: 'contain' 
-                      }}
                       loading="lazy"
                     />
-                  </Link>
-                </div>
 
-                {/* Rating Badge & Add Button Row (matches image_9f57d2d4) */}
-                <div className="d-flex align-items-center justify-content-between mb-2">
-                  <span 
-                    className="badge d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill"
-                    style={{
-                      backgroundColor: '#005F40',
-                      color: '#FFFFFF',
-                      fontSize: '11px',
-                      fontWeight: '700'
-                    }}
+                    {/* HOVER VIEW MORE */}
+                    <div className="product-image-overlay">
+                      <span>
+                        <FaEye />
+                        View More
+                      </span>
+                    </div>
+
+                  </Link>
+
+                  {/* WISHLIST */}
+                  <button
+                    type="button"
+                    className={`product-wishlist-btn ${
+                      wishlistActive ? 'active' : ''
+                    }`}
+                    onClick={() => toggleWishlist(p.id)}
+                    title={
+                      wishlistActive
+                        ? 'Remove from Wishlist'
+                        : 'Add to Wishlist'
+                    }
+                    aria-label="Toggle wishlist"
                   >
-                    <FaStar size={9} /> {p.rating || '4.4'}
+                    <FaHeart />
+                  </button>
+
+                  {/* RATING */}
+                  <span className="product-rating">
+                    <FaStar />
+                    {p.rating || '4.4'}
                   </span>
 
-                  {qty === 0 ? (
-                    <button
-                      onClick={() => addToCart(p, 1)}
-                      className="btn d-inline-flex align-items-center justify-content-center px-3 py-1 text-decoration-none"
-                      style={{
-                        border: '1.5px solid #005F40',
-                        color: '#005F40',
-                        backgroundColor: '#FFFFFF',
-                        borderRadius: '8px',
-                        fontSize: '13px',
-                        fontWeight: '600',
-                        height: '30px',
-                        padding: '2px 16px'
-                      }}
-                      title="Add to Cart"
-                    >
-                      Add
-                    </button>
-                  ) : (
-                    <div 
-                      className="d-flex align-items-center justify-content-between px-2 py-0 rounded-2"
-                      style={{
-                        backgroundColor: '#005F40',
-                        color: '#FFFFFF',
-                        height: '30px',
-                        minWidth: '78px'
-                      }}
-                    >
-                      <button 
-                        onClick={() => {
-                          if (qty <= 1) {
-                            removeFromCart(p.id);
-                          } else {
-                            updateQuantity(p.id, -1);
-                          }
-                        }}
-                        className="btn btn-sm text-white p-0 border-0 d-flex align-items-center justify-content-center"
-                        style={{ fontSize: '11px', width: '22px', height: '22px' }}
-                        aria-label="Decrease quantity"
-                      >
-                        <FaMinus size={9} />
-                      </button>
-                      <span className="fw-bold px-1" style={{ fontSize: '12px' }}>{qty}</span>
-                      <button 
-                        onClick={() => updateQuantity(p.id, 1)}
-                        className="btn btn-sm text-white p-0 border-0 d-flex align-items-center justify-content-center"
-                        style={{ fontSize: '11px', width: '22px', height: '22px' }}
-                        aria-label="Increase quantity"
-                      >
-                        <FaPlus size={9} />
-                      </button>
-                    </div>
-                  )}
                 </div>
 
+                {/* PRODUCT DETAILS */}
+                <div className="product-showcase-details">
 
+                  {/* TITLE */}
+                  <h6
+                    className="product-showcase-title"
+                    title={p.name}
+                  >
+                    <Link to={`/products/${p.id}`}>
+                      {p.name}
+                    </Link>
+                  </h6>
 
-                {/* Product Title */}
-                <h6 
-                  className="mb-1 fw-semibold text-dark"
-                  style={{
-                    fontSize: '13.5px',
-                    lineHeight: '1.35',
-                    minHeight: '36px',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}
-                  title={p.name}
-                >
-                  <Link to={`/products/${p.id}`} className="text-dark text-decoration-none hover-green">
-                    {p.name}
-                  </Link>
-                </h6>
+                  {/* DESCRIPTION */}
+                  <p
+                    className="product-showcase-description"
+                    title={p.attributes || p.composition || p.brand}
+                  >
+                    {p.attributes || p.composition || p.brand || ''}
+                  </p>
 
-                {/* Attribute / Subtitle */}
-                <div 
-                  className="text-secondary text-truncate mb-2" 
-                  style={{ fontSize: '11px', color: '#6B7280' }}
-                >
-                  {p.attributes || p.composition || p.brand}
-                </div>
+                  {/* MRP & DISCOUNT */}
+                  <div className="product-showcase-offer">
 
-
-
-                {/* Price Section */}
-                <div className="mt-auto pt-2">
-                  <div className="d-flex align-items-center gap-2 mb-1" style={{ fontSize: '11.5px' }}>
-                    <span className="text-decoration-line-through text-muted">
+                    <span className="product-mrp">
                       MRP {currencySymbol}{displayMrp}
                     </span>
-                    <span className="fw-bold" style={{ color: '#005F40' }}>
-                      {discountPct}% off
+
+                    <span className="product-discount">
+                      {discountPct}% Off
                     </span>
+
                   </div>
 
-                  <div className="d-flex align-items-baseline gap-1">
-                    <span className="fw-bold text-dark" style={{ fontSize: '16px' }}>
-                      {currencySymbol}{displayPrice}
-                    </span>
-                    {p.unitRate && (
-                      <span className="text-secondary" style={{ fontSize: '10.5px' }}>
-                        ({currencySymbol}{p.unitRate})
+                  {/* PRICE & CART */}
+                  <div className="product-showcase-footer">
+
+                    <div className="product-price">
+                      <span>
+                        {currencySymbol}{displayPrice}
                       </span>
+
+                      {p.unitRate && (
+                        <small>
+                          ({currencySymbol}{p.unitRate})
+                        </small>
+                      )}
+                    </div>
+
+                    {/* ADD TO CART */}
+                    {qty === 0 ? (
+
+                      <button
+                        type="button"
+                        className="product-add-btn"
+                        onClick={() => addToCart(p, 1)}
+                      >
+                        Add to Cart
+                        <FaShoppingCart />
+                      </button>
+
+                    ) : (
+
+                      <div className="product-quantity-control">
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (qty <= 1) {
+                              removeFromCart(p.id);
+                            } else {
+                              updateQuantity(p.id, -1);
+                            }
+                          }}
+                          aria-label="Decrease quantity"
+                        >
+                          <FaMinus />
+                        </button>
+
+                        <span>{qty}</span>
+
+                        <button
+                          type="button"
+                          onClick={() => updateQuantity(p.id, 1)}
+                          aria-label="Increase quantity"
+                        >
+                          <FaPlus />
+                        </button>
+
+                      </div>
+
                     )}
+
                   </div>
+
                 </div>
 
               </div>
+
             );
+
           })}
+
         </div>
       </div>
-    </div>
+
+      {/* COMPONENT CSS */}
+      <style>{`
+
+        .product-showcase-section {
+          width: 100%;
+          position: relative;
+          background: transparent;
+        }
+
+        /* HEADER */
+
+        .product-showcase-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 15px;
+        }
+
+        .product-showcase-heading {
+          color: #172B24;
+        }
+
+        .product-showcase-subtitle {
+          display: block;
+          font-size: 11px;
+          font-weight: 700;
+          color: #08784B;
+          letter-spacing: .8px;
+          text-transform: uppercase;
+          margin-bottom: 4px;
+        }
+
+        .product-showcase-heading h3 {
+          font-size: 22px;
+          font-weight: 700;
+          margin: 0;
+          letter-spacing: -.4px;
+          color: #172B24;
+        }
+
+        /* NAVIGATION */
+
+        .product-showcase-navigation {
+          display: flex;
+          gap: 8px;
+          flex-shrink: 0;
+        }
+
+        .product-showcase-navigation button {
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          border: 1px solid #E5E7EB;
+          background: #FFFFFF;
+          color: #005F40;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all .2s ease;
+        }
+
+        .product-showcase-navigation button:hover {
+          background: #005F40;
+          color: #FFFFFF;
+          border-color: #005F40;
+        }
+
+        .product-showcase-navigation button svg {
+          font-size: 12px;
+        }
+
+        /* SLIDER TRACK */
+
+        .product-showcase-track-wrapper {
+          width: 100%;
+          overflow: hidden;
+        }
+
+        .product-showcase-track {
+          display: flex;
+          gap: 16px;
+          width: 100%;
+          overflow-x: auto;
+          overflow-y: hidden;
+          scroll-behavior: smooth;
+          scroll-snap-type: x mandatory;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          padding: 3px 2px 12px;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .product-showcase-track::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* FIVE CARDS IN ONE ROW */
+
+        .product-showcase-card {
+          flex: 0 0 calc((100% - 64px) / 5);
+          min-width: 0;
+          max-width: calc((100% - 64px) / 5);
+          background: #FFFFFF;
+          border: 1px solid #E5DED4;
+          border-radius: 16px;
+          padding: 10px;
+          display: flex;
+          flex-direction: column;
+          scroll-snap-align: start;
+          box-shadow: 0 5px 16px rgba(0,0,0,.07);
+          transition:
+            transform .25s ease,
+            box-shadow .25s ease,
+            border-color .25s ease;
+        }
+
+        .product-showcase-card:hover {
+          transform: translateY(-4px);
+          border-color: #C9DCCF;
+          box-shadow: 0 10px 24px rgba(0,95,64,.12);
+        }
+
+        /* IMAGE */
+
+        .product-showcase-image {
+          width: 100%;
+          height: 150px;
+          position: relative;
+          flex-shrink: 0;
+          overflow: hidden;
+          border-radius: 12px;
+          background: #FFFFFF;
+        }
+
+        .product-image-link {
+          display: flex;
+          width: 100%;
+          height: 100%;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .product-image-link img {
+          width: 100%;
+          height: 100%;
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          display: block;
+          transition: transform .4s ease;
+        }
+
+        .product-showcase-card:hover .product-image-link img {
+          transform: scale(1.05);
+        }
+
+        /* VIEW MORE OVERLAY */
+
+        .product-image-overlay {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(0, 0, 0, .32);
+          opacity: 0;
+          visibility: hidden;
+          transition: all .3s ease;
+        }
+
+        .product-image-overlay span {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+          background: #FFFFFF;
+          color: #005F40;
+          padding: 9px 15px;
+          border-radius: 30px;
+          font-size: 12px;
+          font-weight: 700;
+          transform: translateY(10px);
+          transition: transform .3s ease;
+        }
+
+        .product-showcase-card:hover .product-image-overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .product-showcase-card:hover .product-image-overlay span {
+          transform: translateY(0);
+        }
+
+        /* WISHLIST */
+
+        .product-wishlist-btn {
+          position: absolute;
+          top: 9px;
+          right: 9px;
+          z-index: 3;
+          width: 34px;
+          height: 34px;
+          border: 1px solid #E9E1D5;
+          border-radius: 50%;
+          background: #FFFFFF;
+          color: #9B8159;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all .2s ease;
+        }
+
+        .product-wishlist-btn svg {
+          font-size: 14px;
+        }
+
+        .product-wishlist-btn:hover,
+        .product-wishlist-btn.active {
+          color: #E11D48;
+          background: #FFF1F2;
+          border-color: #FECDD3;
+        }
+
+        /* RATING */
+
+        .product-rating {
+          position: absolute;
+          left: 8px;
+          bottom: 8px;
+          z-index: 2;
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          background: #005F40;
+          color: #FFFFFF;
+          border-radius: 20px;
+          padding: 3px 8px;
+          font-size: 11px;
+          font-weight: 700;
+          line-height: 1;
+        }
+
+        .product-rating svg {
+          font-size: 10px;
+        }
+
+        /* PRODUCT DETAILS */
+
+        .product-showcase-details {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          padding-top: 9px;
+          min-width: 0;
+        }
+
+        .product-showcase-title {
+          font-size: 14px;
+          line-height: 1.4;
+          font-weight: 600;
+          min-height: 39px;
+          max-height: 39px;
+          margin: 0 0 4px;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+
+        .product-showcase-title a {
+          text-decoration: none;
+          color: #172B24;
+          transition: color .2s ease;
+        }
+
+        .product-showcase-title a:hover {
+          color: #005F40;
+        }
+
+        .product-showcase-description {
+          font-size: 11px;
+          color: #6B7280;
+          line-height: 1.4;
+          margin: 0 0 9px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          min-height: 16px;
+        }
+
+        /* OFFER */
+
+        .product-showcase-offer {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          flex-wrap: wrap;
+          margin-bottom: 9px;
+          font-size: 11px;
+        }
+
+        .product-mrp {
+          color: #888888;
+          text-decoration: line-through;
+        }
+
+        .product-discount {
+          color: #B42332;
+          font-weight: 700;
+        }
+
+        /* PRICE + BUTTON */
+
+        .product-showcase-footer {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 5px;
+          margin-top: auto;
+          padding-top: 2px;
+        }
+
+        .product-price {
+          display: flex;
+          align-items: baseline;
+          gap: 3px;
+          min-width: 0;
+          white-space: nowrap;
+        }
+
+        .product-price > span {
+          font-size: 17px;
+          font-weight: 800;
+          color: #111827;
+        }
+
+        .product-price small {
+          font-size: 10px;
+          color: #6B7280;
+        }
+
+        /* ADD TO CART */
+
+        .product-add-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          flex-shrink: 0;
+          height: 36px;
+          padding: 0 11px;
+          border: 0;
+          border-radius: 10px;
+          background: #08784B;
+          color: #FFFFFF;
+          font-size: 11px;
+          font-weight: 700;
+          white-space: nowrap;
+          cursor: pointer;
+          box-shadow: 0 3px 8px rgba(0,95,64,.17);
+          transition: all .2s ease;
+        }
+
+        .product-add-btn:hover {
+          background: #005F40;
+          transform: translateY(-2px);
+        }
+
+        .product-add-btn svg {
+          font-size: 12px;
+        }
+
+        /* QUANTITY */
+
+        .product-quantity-control {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-shrink: 0;
+          height: 34px;
+          min-width: 85px;
+          padding: 0 5px;
+          border-radius: 9px;
+          background: #08784B;
+          color: #FFFFFF;
+        }
+
+        .product-quantity-control button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 23px;
+          height: 25px;
+          border: 0;
+          background: transparent;
+          color: #FFFFFF;
+          cursor: pointer;
+        }
+
+        .product-quantity-control button svg {
+          font-size: 10px;
+        }
+
+        .product-quantity-control span {
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        /* TABLET */
+
+        @media (max-width: 991.98px) {
+
+          .product-showcase-card {
+            flex-basis: calc((100% - 48px) / 4);
+            max-width: calc((100% - 48px) / 4);
+          }
+
+          .product-showcase-image {
+            height: 135px;
+          }
+
+        }
+
+        /* SMALL TABLET */
+
+        @media (max-width: 767.98px) {
+
+          .product-showcase-card {
+            flex-basis: calc((100% - 32px) / 3);
+            max-width: calc((100% - 32px) / 3);
+          }
+
+          .product-showcase-image {
+            height: 125px;
+          }
+
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 575.98px) {
+
+          .product-showcase-header {
+            margin-bottom: 12px;
+          }
+
+          .product-showcase-heading h3 {
+            font-size: 19px;
+          }
+
+          .product-showcase-track {
+            gap: 12px;
+          }
+
+          .product-showcase-card {
+            flex-basis: calc((100% - 12px) / 2);
+            max-width: calc((100% - 12px) / 2);
+            padding: 8px;
+            border-radius: 13px;
+          }
+
+          .product-showcase-image {
+            height: 135px;
+          }
+
+          .product-showcase-title {
+            font-size: 13px;
+          }
+
+          .product-price > span {
+            font-size: 15px;
+          }
+
+          .product-add-btn {
+            padding: 0 8px;
+            font-size: 10px;
+            height: 32px;
+          }
+
+          .product-wishlist-btn {
+            width: 30px;
+            height: 30px;
+          }
+
+        }
+
+        /* SMALL MOBILE */
+
+        @media (max-width: 380px) {
+
+          .product-showcase-card {
+            flex-basis: 78%;
+            max-width: 78%;
+          }
+
+          .product-showcase-image {
+            height: 160px;
+          }
+
+        }
+
+        /* TOUCH DEVICES */
+        @media (hover: none) {
+          .product-image-overlay {
+            display: none;
+          }
+
+          .product-showcase-card:hover {
+            transform: none;
+          }
+
+        }
+
+      `}</style>
+
+    </section>
   );
 }

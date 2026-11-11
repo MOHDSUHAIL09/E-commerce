@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ProfileDrawer from './ProfileDrawer';
+import { FaUser } from 'react-icons/fa';
 
 export default function MobileBottomNavbar({ onOpenLogin = null, onOpenWishlist = null } = {}) {
   const location = useLocation();
@@ -59,28 +60,14 @@ export default function MobileBottomNavbar({ onOpenLogin = null, onOpenWishlist 
       )
     },
     {
-      id: 'insurance',
-      label: 'Insurance',
-      path: '/Profile',
-      match: ['/insurance'],
-      icon: (isActive) => (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M12 3L4 7V12C4 16.5 7.5 20.5 12 21.5C16.5 20.5 20 16.5 20 12V7L12 3Z" stroke={isActive ? '#0E738A' : '#4B5563'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M12 8V14M9 11H15" stroke={isActive ? '#0E738A' : '#4B5563'} strokeWidth="1.8" strokeLinecap="round"/>
-        </svg>
-      )
-    },
-    {
       id: 'my-health',
-      label: 'My Health',
+      label: 'Account',
       isAction: true,
       onClick: () => setIsProfileOpen(true),
       icon: (isActive) => (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke={isActive || isProfileOpen ? '#0E738A' : '#4B5563'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M14 2V8H20" stroke={isActive || isProfileOpen ? '#0E738A' : '#4B5563'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M12 12V16M10 14H14" stroke={isActive || isProfileOpen ? '#0E738A' : '#4B5563'} strokeWidth="2" strokeLinecap="round"/>
-        </svg>
+        <FaUser
+          color={isActive || isProfileOpen ? '#0E738A' : '#4B5563'}
+        />
       )
     }
   ];

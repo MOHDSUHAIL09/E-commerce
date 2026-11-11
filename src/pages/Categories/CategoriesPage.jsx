@@ -8,25 +8,25 @@ import {
   FaSearch, FaArrowRight
 } from 'react-icons/fa';
 export const CATEGORIES = [
-  { id: 'cat-1', name: 'Prescription Medicines', slug: 'prescription-medicines', icon: 'FaPrescriptionBottleAlt', count: 420, description: 'Doctor prescribed ethical medicines & generics' },
-  { id: 'cat-2', name: 'OTC Medicines', slug: 'otc-medicines', icon: 'FaPills', count: 350, description: 'Everyday over-the-counter remedies & fever care' },
-  { id: 'cat-3', name: 'Diabetes Care', slug: 'diabetes-care', icon: 'FaHeartbeat', count: 180, description: 'Glucometers, strips, sugar substitutes & foot care' },
-  { id: 'cat-4', name: 'Cardiac Care', slug: 'cardiac-care', icon: 'FaHeart', count: 95, description: 'Blood pressure support, omega-3 & heart health' },
-  { id: 'cat-5', name: 'Ayurvedic Medicines', slug: 'ayurvedic-medicines', icon: 'FaLeaf', count: 240, description: 'Pure herbal extracts, chyawanprash & immunity boosters' },
-  { id: 'cat-6', name: 'Vitamins & Supplements', slug: 'vitamins-supplements', icon: 'FaCapsules', count: 310, description: 'Multivitamins, Vitamin C, D3, Zinc, Calcium' },
-  { id: 'cat-7', name: 'Protein & Nutrition', slug: 'protein-nutrition', icon: 'FaDumbbell', count: 140, description: 'Whey protein, plant protein, creatine & shakes' },
-  { id: 'cat-8', name: 'Baby & Mother Care', slug: 'baby-mother-care', icon: 'FaBaby', count: 210, description: 'Baby food, diapers, gentle skin care & maternal care' },
-  { id: 'cat-9', name: 'Personal Care', slug: 'personal-care', icon: 'FaPumpSoap', count: 280, description: 'Soaps, handwashes, deodorants & grooming essentials' },
-  { id: 'cat-10', name: 'Skin Care', slug: 'skin-care', icon: 'FaSmileBeam', count: 260, description: 'Dermatologist tested sunscreens, cleansers & moisturizers' },
-  { id: 'cat-11', name: 'Hair Care', slug: 'hair-care', icon: 'FaCut', count: 175, description: 'Anti-dandruff shampoos, hair serums & biotin tablets' },
-  { id: 'cat-12', name: 'Pain Relief', slug: 'pain-relief', icon: 'FaBandAid', count: 130, description: 'Analgesic sprays, balms, heat patches & gel ointments' },
-  { id: 'cat-13', name: 'First Aid', slug: 'first-aid', icon: 'FaMedkit', count: 90, description: 'Antiseptics, bandages, medical cotton & gauze' },
-  { id: 'cat-14', name: 'Medical Devices', slug: 'medical-devices', icon: 'FaStethoscope', count: 115, description: 'Digital BP monitors, pulse oximeters & nebulizers' },
-  { id: 'cat-15', name: 'Health & Fitness', slug: 'health-fitness', icon: 'FaRunning', count: 160, description: 'Smart scales, compression socks & fitness accessories' },
-  { id: 'cat-16', name: 'Orthopedic Products', slug: 'orthopedic-products', icon: 'FaWalking', count: 85, description: 'Knee braces, cervical collars & lumbar support belts' },
-  { id: 'cat-17', name: 'Eye Care', slug: 'eye-care', icon: 'FaEye', count: 70, description: 'Lubricating drops, contact lens solutions & eye wipes' },
-  { id: 'cat-18', name: 'Dental Care', slug: 'dental-care', icon: 'FaTooth', count: 95, description: 'Sensory toothpastes, electric brushes & mouthwashes' },
-  { id: 'cat-19', name: 'Surgical Supplies', slug: 'surgical-supplies', icon: 'FaProcedures', count: 80, description: 'Surgical masks, nitrile gloves & sterile dressings' }
+  { id: 'cat-1', name: 'Prescription Medicines', slug: 'prescription-medicines', icon: 'FaPrescriptionBottleAlt', description: 'Doctor prescribed ethical medicines & generics' },
+  { id: 'cat-2', name: 'OTC Medicines', slug: 'otc-medicines', icon: 'FaPills', description: 'Everyday over-the-counter remedies & fever care' },
+  { id: 'cat-3', name: 'Diabetes Care', slug: 'diabetes-care', icon: 'FaHeartbeat', description: 'Glucometers, strips, sugar substitutes & foot care' },
+  { id: 'cat-4', name: 'Cardiac Care', slug: 'cardiac-care', icon: 'FaHeart', description: 'Blood pressure support, omega-3 & heart health' },
+  { id: 'cat-5', name: 'Ayurvedic Medicines', slug: 'ayurvedic-medicines', icon: 'FaLeaf', description: 'Pure herbal extracts, chyawanprash & immunity boosters' },
+  { id: 'cat-6', name: 'Vitamins & Supplements', slug: 'vitamins-supplements', icon: 'FaCapsules', description: 'Multivitamins, Vitamin C, D3, Zinc, Calcium' },
+  { id: 'cat-7', name: 'Protein & Nutrition', slug: 'protein-nutrition', icon: 'FaDumbbell', description: 'Whey protein, plant protein, creatine & shakes' },
+  { id: 'cat-8', name: 'Baby & Mother Care', slug: 'baby-mother-care', icon: 'FaBaby', description: 'Baby food, diapers, gentle skin care & maternal care' },
+  { id: 'cat-9', name: 'Personal Care', slug: 'personal-care', icon: 'FaPumpSoap', description: 'Soaps, handwashes, deodorants & grooming essentials' },
+  { id: 'cat-10', name: 'Skin Care', slug: 'skin-care', icon: 'FaSmileBeam', description: 'Dermatologist tested sunscreens, cleansers & moisturizers' },
+  { id: 'cat-11', name: 'Hair Care', slug: 'hair-care', icon: 'FaCut', description: 'Anti-dandruff shampoos, hair serums & biotin tablets' },
+  { id: 'cat-12', name: 'Pain Relief', slug: 'pain-relief', icon: 'FaBandAid', description: 'Analgesic sprays, balms, heat patches & gel ointments' },
+  { id: 'cat-13', name: 'First Aid', slug: 'first-aid', icon: 'FaMedkit', description: 'Antiseptics, bandages, medical cotton & gauze' },
+  { id: 'cat-14', name: 'Medical Devices', slug: 'medical-devices', icon: 'FaStethoscope', description: 'Digital BP monitors, pulse oximeters & nebulizers' },
+  { id: 'cat-15', name: 'Health & Fitness', slug: 'health-fitness', icon: 'FaRunning', description: 'Smart scales, compression socks & fitness accessories' },
+  { id: 'cat-16', name: 'Orthopedic Products', slug: 'orthopedic-products', icon: 'FaWalking', description: 'Knee braces, cervical collars & lumbar support belts' },
+  { id: 'cat-17', name: 'Eye Care', slug: 'eye-care', icon: 'FaEye', description: 'Lubricating drops, contact lens solutions & eye wipes' },
+  { id: 'cat-18', name: 'Dental Care', slug: 'dental-care', icon: 'FaTooth', description: 'Sensory toothpastes, electric brushes & mouthwashes' },
+  { id: 'cat-19', name: 'Surgical Supplies', slug: 'surgical-supplies', icon: 'FaProcedures', description: 'Surgical masks, nitrile gloves & sterile dressings' }
 ];
 
 const ICON_MAP = {
@@ -103,7 +103,7 @@ export default function CategoriesPage() {
                   {cat.description}
                 </p>
                 <div className="d-flex align-items-center justify-content-between pt-2 border-top text-secondary" style={{ fontSize: '12px' }}>
-                  <span className="fw-semibold text-primary-green">{cat.count}+ Products</span>
+                  {/* <span className="fw-semibold text-primary-green">{cat.count}+ Products</span> */}
                   <span className="d-flex align-items-center gap-1 text-dark">
                     Explore <FaArrowRight size={10} />
                   </span>

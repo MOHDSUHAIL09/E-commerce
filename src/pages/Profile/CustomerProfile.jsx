@@ -95,13 +95,6 @@ export default function CustomerProfile() {
     navigate('/');
   };
 
-  const handleReorder = (items) => {
-    items.forEach(item => {
-      addToCart(item, item.quantity);
-    });
-    navigate('/cart');
-  };
-
   const handleCopyCode = (code) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(code);
@@ -261,9 +254,6 @@ export default function CustomerProfile() {
                           <Link to={`/track-order/${order.id}`} className="btn btn-sm btn-outline-success">
                             Track Order
                           </Link>
-                          <button onClick={() => handleReorder(order.items)} className="btn btn-sm btn-outline-secondary">
-                            Reorder Items
-                          </button>
                         </div>
                       </div>
                     ))}
@@ -515,30 +505,14 @@ export default function CustomerProfile() {
                     <input type="text" className="form-control" placeholder="Enter 16-digit Gift Card Code" value={giftCardInput} onChange={(e) => setGiftCardInput(e.target.value)} />
                     <button className="btn btn-success px-4" onClick={() => { alert('Gift Card Added Successfully!'); setGiftCardInput(''); }}>Add</button>
                   </div>
-                  <small className="text-muted mt-2 d-block" style={{fontSize: '12px'}}>Enter the code from the back of your gift card.</small>
                 </div>
 
-                <h5 className="fw-bold text-dark mb-4">My Gift Cards</h5>
+             
                 
                 <div className="text-center py-5 border rounded-3 bg-light">
                   <FaGift size={50} className="text-muted mb-3" style={{opacity: 0.5}} />
                   <h5 className="fw-bold">No Gift Cards Found</h5>
                   <p className="text-secondary mb-4" style={{fontSize: '14px'}}>You currently don't have any active gift cards in your account.</p>
-                  
-                  <div className="d-flex justify-content-center gap-3 flex-wrap">
-                    <div className="card border-0 shadow-sm" style={{width: '150px', cursor: 'pointer'}}>
-                      <div className="card-body text-center p-3">
-                        <h4 className="fw-bold text-success mb-1">₹500</h4>
-                        <small className="text-muted">Buy Gift Card</small>
-                      </div>
-                    </div>
-                    <div className="card border-0 shadow-sm" style={{width: '150px', cursor: 'pointer'}}>
-                      <div className="card-body text-center p-3">
-                        <h4 className="fw-bold text-success mb-1">₹1000</h4>
-                        <small className="text-muted">Buy Gift Card</small>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             )}

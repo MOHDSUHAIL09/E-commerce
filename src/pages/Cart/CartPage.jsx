@@ -128,10 +128,7 @@ export default function CartPage() {
             </p>
             <div className="d-flex flex-wrap justify-content-center gap-3">
               <Link to="/products" className="btn btn-auramed px-4 py-2">
-                Browse Medicines
-              </Link>
-              <Link to="/prescription" className="btn btn-auramed-outline px-4 py-2">
-                Upload Prescription
+                Shop Medicines
               </Link>
             </div>
           </div>
@@ -748,12 +745,10 @@ export default function CartPage() {
                   </form>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

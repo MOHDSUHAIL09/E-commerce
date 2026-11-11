@@ -104,7 +104,6 @@ export const DOCTORS = [
     qualification: 'MBBS (Andhra Medical College)',
     experienceYears: 12,
     rating: 4.9,
-    reviewsCount: 380,
     fee: 599,
     inrFee: 599,
     city: 'Visakhapatnam',
@@ -127,7 +126,6 @@ export const DOCTORS = [
     qualification: 'MBBS, AFIH, Advanced Certificate in Diabetology',
     experienceYears: 10,
     rating: 4.8,
-    reviewsCount: 520,
     fee: 770,
     inrFee: 770,
     city: 'Hyderabad',
@@ -150,7 +148,6 @@ export const DOCTORS = [
     qualification: 'MBBS, MD (General Medicine)',
     experienceYears: 6,
     rating: 4.9,
-    reviewsCount: 290,
     fee: 760,
     inrFee: 760,
     city: 'Visakhapatnam',
@@ -173,7 +170,6 @@ export const DOCTORS = [
     qualification: 'MBBS, Family Medicine Fellowship',
     experienceYears: 8,
     rating: 4.9,
-    reviewsCount: 310,
     fee: 650,
     inrFee: 650,
     city: 'Hyderabad',
@@ -196,7 +192,6 @@ export const DOCTORS = [
     qualification: 'MBBS, MD (Dermatology, Venereology & Leprosy)',
     experienceYears: 11,
     rating: 4.9,
-    reviewsCount: 440,
     fee: 699,
     inrFee: 699,
     city: 'Bangalore',
@@ -219,7 +214,6 @@ export const DOCTORS = [
     qualification: 'MBBS, MD, DM (Cardiology), FACC',
     experienceYears: 18,
     rating: 4.9,
-    reviewsCount: 680,
     fee: 899,
     inrFee: 899,
     city: 'New Delhi',
@@ -242,7 +236,6 @@ export const DOCTORS = [
     qualification: 'MBBS, MS (OBG), DNB, Fellowship in Fetal Medicine',
     experienceYears: 15,
     rating: 4.9,
-    reviewsCount: 510,
     fee: 750,
     inrFee: 750,
     city: 'Mumbai',
@@ -265,7 +258,6 @@ export const DOCTORS = [
     qualification: 'MBBS, MS (Orthopaedics), MCh Orth (UK)',
     experienceYears: 14,
     rating: 4.8,
-    reviewsCount: 420,
     fee: 799,
     inrFee: 799,
     city: 'Chennai',
@@ -288,7 +280,7 @@ export const DOCTORS = [
     qualification: 'MBBS, MD (Paediatrics), Fellowship in Neonatal Care',
     experienceYears: 13,
     rating: 4.9,
-    reviewsCount: 390,
+
     fee: 650,
     inrFee: 650,
     city: 'Kochi',
@@ -311,7 +303,6 @@ export const DOCTORS = [
     qualification: 'MBBS, MS (Otorhinolaryngology)',
     experienceYears: 11,
     rating: 4.8,
-    reviewsCount: 260,
     fee: 600,
     inrFee: 600,
     city: 'Hyderabad',
@@ -334,7 +325,6 @@ export const DOCTORS = [
     qualification: 'MBBS, MD (Medicine), Postgrad Diabetology (Boston)',
     experienceYears: 16,
     rating: 4.9,
-    reviewsCount: 610,
     fee: 799,
     inrFee: 799,
     city: 'Hyderabad',
@@ -357,7 +347,6 @@ export const DOCTORS = [
     qualification: 'MBBS, MD, DM (Gastroenterology)',
     experienceYears: 14,
     rating: 4.8,
-    reviewsCount: 340,
     fee: 850,
     inrFee: 850,
     city: 'Kolkata',
@@ -1349,10 +1338,6 @@ export default function DoctorsPage() {
                     <div className="col-4">
                       <div className="fw-bold text-dark" style={{ fontSize: '15px' }}>{infoDoctor.rating} ★</div>
                       <small className="text-muted" style={{ fontSize: '11px' }}>Rating</small>
-                    </div>
-                    <div className="col-4 border-start border-end">
-                      <div className="fw-bold text-dark" style={{ fontSize: '15px' }}>{infoDoctor.reviewsCount}+</div>
-                      <small className="text-muted" style={{ fontSize: '11px' }}>Consults</small>
                     </div>
                     <div className="col-4">
                       <div className="fw-bold text-dark" style={{ fontSize: '15px' }}>₹{infoDoctor.inrFee || infoDoctor.fee}</div>

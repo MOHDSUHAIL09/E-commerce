@@ -111,6 +111,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
                   <p className="text-secondary mb-4" style={{ fontSize: '13px', maxWidth: '280px', margin: '0 auto' }}>
                     Save prescription medicines and healthcare essentials to order them anytime with one click.
                   </p>
+                  <Link to="/products">
                   <button
                     onClick={onClose}
                     className="btn fw-bold text-white px-4 py-2"
@@ -118,6 +119,7 @@ export default function WishlistDrawer({ isOpen, onClose }) {
                   >
                     Shop Medicines
                   </button>
+                  </Link>
                 </div>
               ) : (
                 <div className="d-flex flex-column gap-3">

@@ -51,12 +51,6 @@ export default function AnimatedSidebar({ isOpen, onClose, onOpenRoleModal }) {
     { title: 'My Wishlist', path: '/wishlist', icon: <FaHeart />, badge: wishlistCount > 0 ? `${wishlistCount}` : null },
   ];
 
-  const dashboardLinks = [
-    { title: 'Customer profile', path: '/Profile', icon: <FaUser /> },
-    { title: 'Admin Management', path: '/admin-dashboard', icon: <FaCog /> },
-    { title: 'Pharmacist Panel', path: '/pharmacist-dashboard', icon: <FaClipboardCheck /> },
-    { title: 'Delivery Partner Portal', path: '/delivery-dashboard', icon: <FaShippingFast /> }
-  ];
 
   const sidebarVariants = {
     closed: {
@@ -129,69 +123,7 @@ export default function AnimatedSidebar({ isOpen, onClose, onOpenRoleModal }) {
               </button>
             </div>
 
-            {/* Profile & Auth Section (Guest vs Logged In) */}
-            <div className="p-3 bg-light border-bottom">
-              {!isLoggedIn ? (
-                <div className="d-flex align-items-center justify-content-between">
-                  <div className="d-flex align-items-center gap-2">
-                    <div 
-                      className="rounded-circle d-flex align-items-center justify-content-center"
-                      style={{ width: '40px', height: '40px', backgroundColor: '#E8F5E9', border: '1.5px solid #159B64' }}
-                    >
-                      <FaUser size={16} color="#005F40" />
-                    </div>
-                    <div>
-                      <div className="fw-bold text-dark" style={{ fontSize: '13px' }}>
-                        Welcome, Guest
-                      </div>
-                      <div className="text-secondary" style={{ fontSize: '11px' }}>
-                        Sign in for personalized care
-                      </div>
-                    </div>
-                  </div>
-                  <button 
-                    onClick={() => {
-                      onClose();
-                      setShowLoginDrawer(true);
-                    }}
-                    className="btn btn-sm text-white px-3 py-1 fw-bold d-flex align-items-center gap-1 shadow-xs"
-                    style={{ backgroundColor: '#005F40', borderRadius: '6px', fontSize: '12px' }}
-                    title="Click to Log In"
-                  >
-                    <FaSignInAlt size={12} />
-                    <span>Login</span>
-                  </button>
-                </div>
-              ) : (
-                <div className="d-flex align-items-center justify-content-between">
-                  <div className="d-flex align-items-center gap-2">
-                    <img 
-                      src={currentUser.avatar} 
-                      alt={currentUser.name}
-                      className="rounded-circle shadow-xs"
-                      style={{ width: '38px', height: '38px', objectFit: 'cover', border: '1.5px solid #159B64' }}
-                    />
-                    <div>
-                      <div className="fw-bold text-dark text-truncate" style={{ fontSize: '13px', maxWidth: '130px' }}>
-                        {currentUser.name}
-                      </div>
-                      <span className="badge bg-success-subtle text-success border border-success-subtle text-capitalize" style={{ fontSize: '10px' }}>
-                        {currentRole} Role
-                      </span>
-                    </div>
-                  </div>
-                  <button 
-                    onClick={() => logout()}
-                    className="btn btn-sm btn-outline-danger px-2 py-1 fw-semibold d-flex align-items-center gap-1 shadow-xs"
-                    style={{ fontSize: '11px', borderRadius: '6px' }}
-                    title="Log Out"
-                  >
-                    <FaSignOutAlt size={11} />
-                    <span>Logout</span>
-                  </button>
-                </div>
-              )}
-            </div>
+
 
             {/* Navigation Menu Items (Clean Full-Width Vertical Column) */}
             <div className="flex-grow-1 p-3 overflow-y-auto">
@@ -259,7 +191,7 @@ export default function AnimatedSidebar({ isOpen, onClose, onOpenRoleModal }) {
                   >
                     <div className="d-flex align-items-center gap-3">
                       <FaBoxes color="#159B64" />
-                      <span className="fw-semibold">Browse 19 Categories</span>
+                      <span className="fw-semibold">Browse Categories</span>
                     </div>
                     <motion.span animate={{ rotate: categoriesExpanded ? 180 : 0 }}>
                       <FaChevronDown size={12} color="#64756D" />
@@ -291,29 +223,6 @@ export default function AnimatedSidebar({ isOpen, onClose, onOpenRoleModal }) {
                     )}
                   </AnimatePresence>
                 </motion.div>
-
-                {/* Role Portals section */}
-                <div className="text-secondary text-uppercase mt-4 mb-2 px-2" style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.8px' }}>
-                  Dashboards & Portals
-                </div>
-
-                {dashboardLinks.map((dash, i) => (
-                  <motion.div key={i} variants={itemVariants} className="w-100">
-                    <Link
-                      to={dash.path}
-                      className={`w-100 d-flex align-items-center justify-content-between p-2 rounded text-decoration-none ${
-                        location.pathname === dash.path ? 'bg-light-green text-dark-green fw-bold' : 'text-secondary hover-light'
-                      }`}
-                      style={{ fontSize: '13px', borderRadius: '8px' }}
-                    >
-                      <div className="d-flex align-items-center gap-3">
-                        <span className="text-primary-green">{dash.icon}</span>
-                        <span>{dash.title}</span>
-                      </div>
-                      <FaChevronRight size={10} className="text-muted" />
-                    </Link>
-                  </motion.div>
-                ))}
               </div>
             </div>
 

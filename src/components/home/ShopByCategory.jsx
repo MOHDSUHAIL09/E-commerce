@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight, FaHeartbeat } from 'react-icons/fa';
@@ -140,10 +141,56 @@ export default function CategorySlider() {
     }
   ];
 
+  // Mobile animation: Trigger only at screen center
+  useEffect(() => {
+    const rows = document.querySelectorAll('.category-reveal-row');
+
+    // Center detection area (middle 10% of viewport)
+    const centerObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('category-row-visible');
+          }
+        });
+      },
+      {
+        threshold: 0,
+        rootMargin: '-45% 0px -30% 0px'
+      }
+    );
+
+    // Reset animation only when row completely leaves screen
+    const resetObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            entry.target.classList.remove('category-row-visible');
+          }
+        });
+      },
+      {
+        threshold: 0,
+        rootMargin: '0px'
+      }
+    );
+
+    rows.forEach((row) => {
+      centerObserver.observe(row);
+      resetObserver.observe(row);
+    });
+
+    return () => {
+      centerObserver.disconnect();
+      resetObserver.disconnect();
+    };
+  }, []);
+
   const handleScroll = () => {
     if (scrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
       const maxScroll = scrollWidth - clientWidth;
+
       if (maxScroll > 0) {
         const dotIndex = Math.min(5, Math.round((scrollLeft / maxScroll) * 5));
         setActiveDot(dotIndex);
@@ -153,6 +200,7 @@ export default function CategorySlider() {
 
   useEffect(() => {
     const el = scrollRef.current;
+
     if (el) {
       el.addEventListener('scroll', handleScroll, { passive: true });
       return () => el.removeEventListener('scroll', handleScroll);
@@ -164,254 +212,377 @@ export default function CategorySlider() {
       const card = scrollRef.current.querySelector('.category-slider-card');
       const step = card ? card.offsetWidth + 16 : 240;
       const scrollAmount = direction === 'left' ? -step : step;
-      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+
+      scrollRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
     }
   };
 
   return (
     <>
-      {/* Mobile: Exact "Shop By Category (12)" 4-column Grid matching image_9ca702b3 */}
-      <div className="d-block d-md-none px-3 py-3 bg-white border-bottom">
-        <h5 className="fw-bold text-dark mb-3" style={{ fontSize: '18px', letterSpacing: '-0.3px' }}>
+      {/* Mobile: Shop By Category - Animated 4 Column Grid */}
+      <div className="d-block d-md-none px-3 py-3 bg-white border-bottom category-mobile-wrapper">
+
+        <h5
+          className="fw-bold text-dark mb-3"
+          style={{
+            fontSize: '18px',
+            letterSpacing: '-0.3px'
+          }}
+        >
           Shop By Category (12)
         </h5>
-        <div className="row g-2">
-          {MOBILE_CATEGORIES.map((cat) => (
-            <div key={cat.id} className="col-3">
-              <Link 
-                to={cat.link}
-                className="text-decoration-none d-flex flex-column align-items-center"
-              >
-                <div 
-                  className="w-100 d-flex align-items-center justify-content-center p-2 rounded-4 mb-1"
-                  style={{
-                    aspectRatio: '1',
-                    backgroundColor: '#F3F4F6',
-                    border: '1px solid #E5E7EB',
-                    overflow: 'hidden'
-                  }}
-                >
-                  <img 
-                    src={cat.image} 
-                    alt={cat.name}
-                    className="w-100 h-100 object-fit-contain"
-                    loading="lazy"
-                  />
+
+        <div className="category-mobile-grid">
+
+          {Array.from({ length: 3 }, (_, rowIndex) => (
+            <div
+              key={rowIndex}
+              className={`row g-2 category-reveal-row ${
+                rowIndex % 2 === 0
+                  ? 'slide-from-left'
+                  : 'slide-from-right'
+              }`}
+            >
+              {MOBILE_CATEGORIES.slice(
+                rowIndex * 4,
+                rowIndex * 4 + 4
+              ).map((cat) => (
+                <div key={cat.id} className="col-3">
+
+                  <Link
+                    to={cat.link}
+                    className="text-decoration-none d-flex flex-column align-items-center"
+                  >
+
+                    <div
+                      className="w-100 d-flex align-items-center justify-content-center p-2 rounded-4 mb-1"
+                      style={{
+                        aspectRatio: '1',
+                        backgroundColor: '#F3F4F6',
+                        border: '1px solid #E5E7EB',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      <img
+                        src={cat.image}
+                        alt={cat.name}
+                        className="w-100 h-100 object-fit-contain"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <span
+                      className="text-center text-dark fw-semibold mt-1"
+                      style={{
+                        fontSize: '11px',
+                        lineHeight: '1.2',
+                        minHeight: '26px',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      {cat.name}
+                    </span>
+
+                  </Link>
+
                 </div>
-                <span 
-                  className="text-center text-dark fw-semibold mt-1"
-                  style={{
-                    fontSize: '11px',
-                    lineHeight: '1.2',
-                    minHeight: '26px',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}
-                >
-                  {cat.name}
-                </span>
-              </Link>
+              ))}
             </div>
           ))}
+
         </div>
       </div>
 
       {/* Desktop: Explore Health Categories Slider */}
-      <section 
-        className="d-none d-md-block py-4 py-md-5 position-relative overflow-hidden" 
-        style={{ 
+      <section
+        className="d-none d-md-block py-4 py-md-5 position-relative overflow-hidden"
+        style={{
           background: 'linear-gradient(135deg, #E6F7F0 0%, #D8F5E8 50%, #EDFAF3 100%)',
           borderTop: '1px solid #D6F0E3',
           borderBottom: '1px solid #D6F0E3'
         }}
       >
-      {/* Top-Right Decorative Stethoscope + Capsule Graphic (matches image_375baab4) */}
-      <div 
-        className="position-absolute top-0 end-0 d-none d-lg-block pointer-events-none"
-        style={{ 
-          width: '420px', 
-          height: '140px',
-          opacity: 0.95,
-          zIndex: 0,
-          pointerEvents: 'none'
-        }}
-      >
-        <img 
-          src="/assets/categories/stethoscope_deco.png" 
-          alt="" 
-          className="w-100 h-100 object-fit-contain"
-        />
-      </div>
 
-      <div className="container-xl position-relative" style={{ zIndex: 1 }}>
-        {/* Section Header (matches image_375baab4) */}
-        <div className="mb-4">
-          <div 
-            className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2 shadow-xs bg-white"
-            style={{ border: '1px solid #C4EBD7' }}
-          >
-            <div 
-              className="rounded-circle d-flex align-items-center justify-content-center text-white"
-              style={{ width: '22px', height: '22px', backgroundColor: '#159B64' }}
-            >
-              <FaHeartbeat size={12} />
-            </div>
-            <span className="fw-bold" style={{ fontSize: '13px', color: '#08784B' }}>
-              Healthcare Categories
-            </span>
-          </div>
-
-          <h2 className="fw-bold mb-1 text-dark" style={{ fontSize: '32px', letterSpacing: '-0.5px' }}>
-            Explore <span style={{ color: '#005F40' }}>Health Categories</span>
-          </h2>
-          <p className="text-secondary mb-0" style={{ fontSize: '15px' }}>
-            Specialized pharmaceutical formulations and daily wellness
-          </p>
+        {/* Top-Right Decorative Stethoscope + Capsule Graphic */}
+        <div
+          className="position-absolute top-0 end-0 d-none d-lg-block pointer-events-none"
+          style={{
+            width: '420px',
+            height: '140px',
+            opacity: 0.95,
+            zIndex: 0,
+            pointerEvents: 'none'
+          }}
+        >
+          <img
+            src="/assets/categories/stethoscope_deco.png"
+            alt=""
+            className="w-100 h-100 object-fit-contain"
+          />
         </div>
 
-        {/* Horizontal Slider with Left & Right scroll buttons */}
-        <div className="position-relative">
-          {/* Left Arrow Button */}
-          <button
-            onClick={() => scroll('left')}
-            className="btn position-absolute top-50 start-0 translate-middle-y z-3 shadow-md rounded-circle d-flex align-items-center justify-content-center p-0"
-            style={{
-              width: '38px',
-              height: '38px',
-              backgroundColor: '#FFFFFF',
-              border: '1px solid #D1E5DA',
-              marginLeft: '-14px',
-              color: '#005F40'
-            }}
-            aria-label="Previous categories"
-          >
-            <FaChevronLeft size={13} />
-          </button>
+        <div className="container-xl position-relative" style={{ zIndex: 1 }}>
 
-          {/* Right Arrow Button */}
-          <button
-            onClick={() => scroll('right')}
-            className="btn position-absolute top-50 end-0 translate-middle-y z-3 shadow-md rounded-circle d-flex align-items-center justify-content-center p-0"
-            style={{
-              width: '38px',
-              height: '38px',
-              backgroundColor: '#FFFFFF',
-              border: '1px solid #D1E5DA',
-              marginRight: '-14px',
-              color: '#005F40'
-            }}
-            aria-label="Next categories"
-          >
-            <FaChevronRight size={13} />
-          </button>
+          {/* Section Header */}
+          <div className="mb-4">
 
-          {/* Category Track (matches image_375baab4) */}
-          <div
-            ref={scrollRef}
-            className="d-flex gap-2 gap-sm-3 overflow-x-auto pb-3 pt-1 px-1 hide-scrollbar"
-            style={{
-              scrollSnapType: 'x mandatory',
-              scrollBehavior: 'smooth',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              WebkitOverflowScrolling: 'touch'
-            }}
-          >
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                to={`/categories/${cat.slug}`}
-                className="category-slider-card text-decoration-none bg-white d-flex flex-column align-items-center justify-content-between text-center p-3 transition-all"
+            <div
+              className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2 shadow-xs bg-white"
+              style={{ border: '1px solid #C4EBD7' }}
+            >
+              <div
+                className="rounded-circle d-flex align-items-center justify-content-center text-white"
                 style={{
-                  height: '215px',
-                  flex: '0 0 auto',
-                  borderRadius: '18px',
-                  border: '1.5px solid #E2EDE7',
-                  scrollSnapAlign: 'start',
-                  boxShadow: '0 4px 14px rgba(0,0,0,0.03)',
-                  transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.borderColor = '#159B64';
-                  e.currentTarget.style.boxShadow = '0 10px 24px rgba(21, 155, 100, 0.16)';
-                  const titleEl = e.currentTarget.querySelector('.cat-title');
-                  if (titleEl) titleEl.style.color = '#005F40';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = '#E2EDE7';
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(0,0,0,0.03)';
-                  const titleEl = e.currentTarget.querySelector('.cat-title');
-                  if (titleEl) titleEl.style.color = '#111827';
+                  width: '22px',
+                  height: '22px',
+                  backgroundColor: '#159B64'
                 }}
               >
-                {/* 3D Category Image (matches image_375baab4) */}
-                <div 
-                  className="d-flex align-items-center justify-content-center my-auto"
-                  style={{ width: '100px', height: '100px' }}
-                >
-                  <img 
-                    src={cat.image} 
-                    alt={cat.name} 
-                    className="w-100 h-100 object-fit-contain"
-                    loading="lazy"
-                  />
-                </div>
+                <FaHeartbeat size={12} />
+              </div>
 
-                {/* Category Title */}
-                <div 
-                  className="cat-title fw-bold text-dark w-100 mt-1 mb-1 px-1"
-                  style={{ 
-                    fontSize: '13px', 
-                    lineHeight: '1.3',
-                    minHeight: '34px',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}
-                  title={cat.name}
-                >
-                  {cat.name}
-                </div>
+              <span
+                className="fw-bold"
+                style={{
+                  fontSize: '13px',
+                  color: '#08784B'
+                }}
+              >
+                Healthcare Categories
+              </span>
+            </div>
 
-                {/* Item Count Pill Badge (matches image_375baab4) */}
-                <div 
-                  className="rounded-pill px-2 py-0.5"
-                  style={{ 
-                    backgroundColor: '#E8F7F0', 
-                    color: '#08784B', 
-                    fontSize: '11px', 
-                    fontWeight: '700' 
-                  }}
-                >
-                  {cat.count}
-                </div>
-              </Link>
-            ))}
+            <h2
+              className="fw-bold mb-1 text-dark"
+              style={{
+                fontSize: '32px',
+                letterSpacing: '-0.5px'
+              }}
+            >
+              Explore <span style={{ color: '#005F40' }}>Health Categories</span>
+            </h2>
+
+            <p className="text-secondary mb-0" style={{ fontSize: '15px' }}>
+              Specialized pharmaceutical formulations and daily wellness
+            </p>
+
           </div>
 
-          {/* Carousel Pagination Dots (matches image_375baab4) */}
-          <div className="d-flex align-items-center justify-content-center gap-1 mt-3">
-            {[0, 1, 2, 3, 4, 5].map((idx) => (
-              <span
-                key={idx}
-                className="rounded-circle transition-all"
-                style={{
-                  width: activeDot === idx ? '8px' : '6px',
-                  height: activeDot === idx ? '8px' : '6px',
-                  backgroundColor: activeDot === idx ? '#10B981' : '#A7F3D0',
-                  display: 'inline-block'
-                }}
-              />
-            ))}
+          {/* Horizontal Slider */}
+          <div className="position-relative">
+
+            {/* Left Arrow Button */}
+            <button
+              onClick={() => scroll('left')}
+              className="btn position-absolute top-50 start-0 translate-middle-y z-3 shadow-md rounded-circle d-flex align-items-center justify-content-center p-0"
+              style={{
+                width: '38px',
+                height: '38px',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #D1E5DA',
+                marginLeft: '-14px',
+                color: '#005F40'
+              }}
+              aria-label="Previous categories"
+            >
+              <FaChevronLeft size={13} />
+            </button>
+
+            {/* Right Arrow Button */}
+            <button
+              onClick={() => scroll('right')}
+              className="btn position-absolute top-50 end-0 translate-middle-y z-3 shadow-md rounded-circle d-flex align-items-center justify-content-center p-0"
+              style={{
+                width: '38px',
+                height: '38px',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #D1E5DA',
+                marginRight: '-14px',
+                color: '#005F40'
+              }}
+              aria-label="Next categories"
+            >
+              <FaChevronRight size={13} />
+            </button>
+
+            {/* Category Track */}
+            <div
+              ref={scrollRef}
+              className="d-flex gap-2 gap-sm-3 overflow-x-auto pb-3 pt-1 px-1 hide-scrollbar"
+              style={{
+                scrollSnapType: 'x mandatory',
+                scrollBehavior: 'smooth',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                WebkitOverflowScrolling: 'touch'
+              }}
+            >
+
+              {categories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  to={`/categories/${cat.slug}`}
+                  className="category-slider-card text-decoration-none bg-white d-flex flex-column align-items-center justify-content-between text-center p-3 transition-all"
+                  style={{
+                    height: '215px',
+                    flex: '0 0 auto',
+                    borderRadius: '18px',
+                    border: '1.5px solid #E2EDE7',
+                    scrollSnapAlign: 'start',
+                    boxShadow: '0 4px 14px rgba(0,0,0,0.03)',
+                    transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.borderColor = '#159B64';
+                    e.currentTarget.style.boxShadow = '0 10px 24px rgba(21, 155, 100, 0.16)';
+
+                    const titleEl = e.currentTarget.querySelector('.cat-title');
+                    if (titleEl) titleEl.style.color = '#005F40';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.borderColor = '#E2EDE7';
+                    e.currentTarget.style.boxShadow = '0 4px 14px rgba(0,0,0,0.03)';
+
+                    const titleEl = e.currentTarget.querySelector('.cat-title');
+                    if (titleEl) titleEl.style.color = '#111827';
+                  }}
+                >
+
+                  {/* 3D Category Image */}
+                  <div
+                    className="d-flex align-items-center justify-content-center my-auto"
+                    style={{
+                      width: '100px',
+                      height: '100px'
+                    }}
+                  >
+                    <img
+                      src={cat.image}
+                      alt={cat.name}
+                      className="w-100 h-100 object-fit-contain"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  {/* Category Title */}
+                  <div
+                    className="cat-title fw-bold text-dark w-100 mt-1 mb-1 px-1"
+                    style={{
+                      fontSize: '13px',
+                      lineHeight: '1.3',
+                      minHeight: '34px',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
+                    }}
+                    title={cat.name}
+                  >
+                    {cat.name}
+                  </div>
+
+                  {/* Item Count Pill Badge */}
+                  <div
+                    className="rounded-pill px-2 py-0.5"
+                    style={{
+                      backgroundColor: '#E8F7F0',
+                      color: '#08784B',
+                      fontSize: '11px',
+                      fontWeight: '700'
+                    }}
+                  >
+                    {cat.count}
+                  </div>
+
+                </Link>
+              ))}
+
+            </div>
+
+            {/* Carousel Pagination Dots */}
+            <div className="d-flex align-items-center justify-content-center gap-1 mt-3">
+
+              {[0, 1, 2, 3, 4, 5].map((idx) => (
+                <span
+                  key={idx}
+                  className="rounded-circle transition-all"
+                  style={{
+                    width: activeDot === idx ? '8px' : '6px',
+                    height: activeDot === idx ? '8px' : '6px',
+                    backgroundColor: activeDot === idx ? '#10B981' : '#A7F3D0',
+                    display: 'inline-block'
+                  }}
+                />
+              ))}
+
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Mobile Category Animation CSS */}
+      <style>{`
+        .category-mobile-grid {
+          overflow: hidden;
+        }
+
+        .category-reveal-row {
+          opacity: 0;
+          transition:
+            transform 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 1.2s ease;
+          will-change: transform, opacity;
+        }
+
+        /* First and Third Row - Left Side */
+        .category-reveal-row.slide-from-left {
+          transform: translate3d(-120px, 0, 0);
+        }
+
+        /* Second Row - Right Side */
+        .category-reveal-row.slide-from-right {
+          transform: translate3d(120px, 0, 0);
+        }
+
+        /* Animation starts at center */
+        .category-reveal-row.category-row-visible {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+
+        /* Stagger Animation */
+        .category-reveal-row.category-row-visible .col-3:nth-child(1) {
+          transition-delay: 0.05s;
+        }
+
+        .category-reveal-row.category-row-visible .col-3:nth-child(2) {
+          transition-delay: 0.15s;
+        }
+
+        .category-reveal-row.category-row-visible .col-3:nth-child(3) {
+          transition-delay: 0.25s;
+        }
+
+        .category-reveal-row.category-row-visible .col-3:nth-child(4) {
+          transition-delay: 0.35s;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .category-reveal-row {
+            opacity: 1;
+            transform: none;
+            transition: none;
+          }
+        }
+      `}</style>
     </>
   );
 }
